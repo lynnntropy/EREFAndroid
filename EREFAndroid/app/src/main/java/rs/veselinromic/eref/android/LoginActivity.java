@@ -98,21 +98,31 @@ public class LoginActivity extends AppCompatActivity
         passwordEditText = (EditText) findViewById(R.id.passwordEditText);
         loginButton = (Button) findViewById(R.id.loginButton);
 
+        SharedPreferences existingLoginPreferences = getSharedPreferences("loginDetails", 0);
+        String username = existingLoginPreferences.getString("username", null);
+        String password = existingLoginPreferences.getString("password", null);
+
+        if (username != null && password != null)
+        {
+            login(username, password);
+        }
+
         loginButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                login();
+                String username = usernameEditText.getText().toString().trim();
+                String password = passwordEditText.getText().toString();
+                login(username, password);
             }
         });
+
+
     }
 
-    void login()
+    void login(String username, String password)
     {
-        String username = usernameEditText.getText().toString().trim();
-        String password = passwordEditText.getText().toString();
-
         new LoginTask(username, password).execute();
 
         this.progressDialog = new ProgressDialog(this);
@@ -124,7 +134,7 @@ public class LoginActivity extends AppCompatActivity
 
     void persistLoginInfo(String username, String password)
     {
-        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("loginDetails", 0);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("username", username);
         editor.putString("password", password);

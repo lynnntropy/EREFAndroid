@@ -2,13 +2,23 @@ package layout;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.io.IOException;
+import java.util.List;
 
 import rs.veselinromic.eref.android.R;
+import rs.veselinromic.eref.android.adapter.NewsAdapter;
+import rs.veselinromic.eref.wrapper.Wrapper;
+import rs.veselinromic.eref.wrapper.model.NewsItem;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,7 +30,43 @@ import rs.veselinromic.eref.android.R;
  */
 public class NewsFragment extends Fragment
 {
+    class GetNewsTask extends AsyncTask<Void, Void, Void>
+    {
+        List<NewsItem> newsItemList;
+
+        @Override
+        protected Void doInBackground(Void... params)
+        {
+            try
+            {
+                this.newsItemList = Wrapper.getNews();
+            }
+            catch (IOException e)
+            {
+                Log.e("GetNewsTask", "e", e);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid)
+        {
+            if (this.newsItemList != null)
+            {
+                NewsAdapter newsAdapter = new NewsAdapter(getActivity(), this.newsItemList);
+
+//                NewsFragment.this.newsListView.setAdapter(
+//                        new ArrayAdapter<NewsItem>(getActivity(), android.R.layout.simple_list_item_1, this.newsItemList));
+
+                newsListView.setAdapter(newsAdapter);
+            }
+        }
+    }
+
     private OnFragmentInteractionListener mListener;
+
+    ListView newsListView;
 
     public NewsFragment()
     {
@@ -61,8 +107,14 @@ public class NewsFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_news, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_news, container, false);
+
+        this.newsListView = (ListView) rootView.findViewById(R.id.newsListView);
+
+        new GetNewsTask().execute();
+
+//        return inflater.inflate(R.layout.fragment_news, container, false);
+        return rootView;
     }
 
     @Override
