@@ -1,74 +1,38 @@
-package layout;
+package rs.veselinromic.eref.android.fragment;
 
 import android.content.Context;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-
-import java.io.IOException;
-import java.util.List;
 
 import rs.veselinromic.eref.android.R;
-import rs.veselinromic.eref.android.adapter.NewsAdapter;
-import rs.veselinromic.eref.wrapper.Wrapper;
-import rs.veselinromic.eref.wrapper.model.NewsItem;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link NewsFragment.OnFragmentInteractionListener} interface
+ * {@link EboardNewsFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link NewsFragment#newInstance} factory method to
+ * Use the {@link EboardNewsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewsFragment extends Fragment
+public class EboardNewsFragment extends Fragment
 {
-    class GetNewsTask extends AsyncTask<Void, Void, Void>
-    {
-        List<NewsItem> newsItemList;
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
-        @Override
-        protected Void doInBackground(Void... params)
-        {
-            try
-            {
-                this.newsItemList = Wrapper.getNews();
-            }
-            catch (IOException e)
-            {
-                Log.e("GetNewsTask", "e", e);
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid)
-        {
-            if (this.newsItemList != null)
-            {
-                NewsAdapter newsAdapter = new NewsAdapter(getActivity(), this.newsItemList);
-
-//                NewsFragment.this.newsListView.setAdapter(
-//                        new ArrayAdapter<NewsItem>(getActivity(), android.R.layout.simple_list_item_1, this.newsItemList));
-
-                newsListView.setAdapter(newsAdapter);
-            }
-        }
-    }
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
-    ListView newsListView;
-
-    public NewsFragment()
+    public EboardNewsFragment()
     {
         // Required empty public constructor
     }
@@ -79,15 +43,15 @@ public class NewsFragment extends Fragment
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment NewsFragment.
+     * @return A new instance of fragment EboardNewsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NewsFragment newInstance(String param1, String param2)
+    public static EboardNewsFragment newInstance(String param1, String param2)
     {
-        NewsFragment fragment = new NewsFragment();
+        EboardNewsFragment fragment = new EboardNewsFragment();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -98,8 +62,8 @@ public class NewsFragment extends Fragment
         super.onCreate(savedInstanceState);
         if (getArguments() != null)
         {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -107,14 +71,17 @@ public class NewsFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_news, container, false);
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_eboard_news, container, false);
+    }
 
-        this.newsListView = (ListView) rootView.findViewById(R.id.newsListView);
-
-        new GetNewsTask().execute();
-
-//        return inflater.inflate(R.layout.fragment_news, container, false);
-        return rootView;
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri)
+    {
+        if (mListener != null)
+        {
+            mListener.onFragmentInteraction(uri);
+        }
     }
 
     @Override

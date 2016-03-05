@@ -140,6 +140,6 @@ public class LoginActivity extends AppCompatActivity
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("username", username);
         editor.putString("password", password);
-        editor.commit();
+        editor.apply();
     }
 }

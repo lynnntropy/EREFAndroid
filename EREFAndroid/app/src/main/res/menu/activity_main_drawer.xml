@@ -4,6 +4,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_vtsvesti"
+            android:checked="true"
             android:icon="@drawable/ic_assignment_black_24dp"
             android:title="VTŠ Vesti"/>
         <item
@@ -22,31 +23,34 @@
             android:id="@+id/nav_raspored"
             android:icon="@drawable/ic_event_black_24dp"
             android:title="Raspored"/>
-    </group>
 
-    <item android:title="E-Tabla">
-        <menu>
-            <item
-                android:id="@+id/nav_etablavesti"
-                android:icon="@drawable/ic_assignment_black_24dp"
-                android:title="Vesti"/>
-            <item
-                android:id="@+id/nav_klisei"
-                android:icon="@drawable/ic_content_copy_black_24dp"
-                android:title="Klišei"/>
-            <item
-                android:id="@+id/nav_rezultati"
-                android:icon="@drawable/ic_inbox_black_24dp"
-                android:title="Rezultati"/>
-            <item
-                android:id="@+id/nav_odbrana"
-                android:icon="@drawable/ic_school_black_24dp"
-                android:title="Odbrana završnog rada"/>
-            <item
-                android:id="@+id/nav_poruke"
-                android:icon="@drawable/ic_notifications_active_black_24dp"
-                android:title="Poruke"/>
-        </menu>
-    </item>
+        <item android:title="E-Tabla">
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@+id/nav_etablavesti"
+                        android:icon="@drawable/ic_assignment_black_24dp"
+                        android:title="Vesti"/>
+                    <item
+                        android:id="@+id/nav_klisei"
+                        android:icon="@drawable/ic_content_copy_black_24dp"
+                        android:title="Klišei"/>
+                    <item
+                        android:id="@+id/nav_rezultati"
+                        android:icon="@drawable/ic_inbox_black_24dp"
+                        android:title="Rezultati"/>
+                    <item
+                        android:id="@+id/nav_odbrana"
+                        android:icon="@drawable/ic_school_black_24dp"
+                        android:title="Odbrana završnog rada"/>
+                    <item
+                        android:id="@+id/nav_poruke"
+                        android:icon="@drawable/ic_notifications_active_black_24dp"
+                        android:title="Poruke"/>
+                </group>
+            </menu>
+        </item>
+
+    </group>
 
 </menu>
