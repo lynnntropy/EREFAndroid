@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context=".fragment.UserProfileFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:stretchColumns="1"
+        android:padding="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="40dp"
+        android:id="@+id/tableLayout">
+
+        <TableRow>
+            <TextView android:text="Osnov" android:gravity="center" android:textStyle="bold"/>
+            <TextView android:text="Kredit" android:gravity="center" android:textStyle="bold" />
+        </TableRow>
+        <TableRow android:layout_marginTop="5dp" android:gravity="center">
+            <TextView android:gravity="center" android:text="Evidencija semestra\nNaknadna evidencija semestra\nUverenja o položenim ispitima\nUverenja\nPrijava ispita\nZavršni rad" />
+            <TextView
+                android:gravity="center"
+                      android:id="@+id/generalCreditView"/>
+        </TableRow>
+        <TableRow android:layout_marginTop="5dp" android:gravity="center">
+            <TextView android:gravity="center" android:text="Upisnina i školarina" />
+            <TextView
+                android:gravity="center"
+                      android:id="@+id/tuitionCreditView"/>
+        </TableRow>
+
+    </TableLayout>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/tableLayout"
+        android:layout_marginTop="5dp"
+        android:divider="@null"
+        android:layout_marginLeft="50dp"/>
+</RelativeLayout>

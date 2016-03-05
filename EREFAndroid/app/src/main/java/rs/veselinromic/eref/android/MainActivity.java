@@ -19,6 +19,7 @@ import java.io.IOException;
 
 import rs.veselinromic.eref.android.fragment.EboardNewsFragment;
 import rs.veselinromic.eref.android.fragment.NewsFragment;
+import rs.veselinromic.eref.android.fragment.UserProfileFragment;
 import rs.veselinromic.eref.wrapper.Wrapper;
 import rs.veselinromic.eref.wrapper.model.UserProfile;
 
@@ -122,6 +123,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_etablavesti:
                 transaction.replace(R.id.fragmentContainer, new EboardNewsFragment()).commit();
+                break;
+            case R.id.nav_profil:
+                transaction.replace(R.id.fragmentContainer, new UserProfileFragment()).commit();
                 break;
         }
 

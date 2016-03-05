@@ -5,8 +5,8 @@ import java.util.List;
 public class UserProfile
 {
     public List<NameValuePair> userData;
-    String generalCredit;
-    String tuitionCredit;
+    public String generalCredit;
+    public String tuitionCredit;
 
     public UserProfile(List<NameValuePair> userData, String generalCredit, String tuitionCredit)
     {
