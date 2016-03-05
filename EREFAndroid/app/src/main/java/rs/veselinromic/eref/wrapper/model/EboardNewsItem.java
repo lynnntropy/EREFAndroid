@@ -7,24 +7,26 @@ public class EboardNewsItem
     public String dateTime;
 
     public String title;
-    public String body;
+    public String bodyText;
+    public String bodyHtml;
 
-    public EboardNewsItem(String submitter, String subject, String dateTime, String title, String body)
+    public EboardNewsItem(String submitter, String subject, String dateTime, String title, String bodyText, String bodyHtml)
     {
         this.submitter = submitter;
-        this.subject = (subject == null || subject.trim().length() == 0) ? "Opšta informacija" : subject;
+        this.subject = subject;
         this.dateTime = dateTime;
         this.title = title;
-        this.body = body;
+        this.bodyText = bodyText;
+        this.bodyHtml = bodyHtml;
     }
 
     public String toString()
     {
         String truncatedBody;
-        if (body.length() > 15)
-            truncatedBody = body.substring(0, 15) + "...";
+        if (bodyText.length() > 15)
+            truncatedBody = bodyText.substring(0, 15) + "...";
         else
-            truncatedBody = body;
+            truncatedBody = bodyText;
 
         return submitter + "\n" + subject + "\n" + dateTime + "\n" + title + "\n" + truncatedBody;
     }

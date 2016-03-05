@@ -93,7 +93,8 @@ public class Wrapper
                     element.select(".subjects-f").text().trim(),
                     dateTime,
                     element.select(".eboard-post-title").text().trim(),
-                    element.select(".eboard-post-content").text().trim()
+                    element.select(".eboard-post-content").text().trim(),
+                    element.select(".eboard-post-content").html().trim()
             ));
         }
 
