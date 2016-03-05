@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/card"
                 android:paddingLeft="20dp"
                 android:paddingTop="5dp"
                 android:paddingRight="20dp"
-                android:paddingBottom="20dp">
+                android:paddingBottom="0dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -21,18 +21,32 @@
         android:layout_toStartOf="@+id/dateTextView"
         android:textStyle="bold"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Semestar evidentiraju svi aktivni studenti, osim studenata koji rade ekvivalenciju i apsolvenata.  Evidencija semestra traje od 25.01.2016. do 05.02.2016. godine. (Nakon ovog termina, evidencija semestra je moguća uz doplatu definisanu cenovnikom škole.)"-->
+        <!--android:id="@+id/bodyTextView"-->
+        <!--android:layout_below="@+id/titleTextView"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:textSize="15sp"/>-->
+
+    <org.sufficientlysecure.htmltextview.HtmlTextView
+        android:id="@+id/bodyHtmlTextView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Semestar evidentiraju svi aktivni studenti, osim studenata koji rade ekvivalenciju i apsolvenata.  Evidencija semestra traje od 25.01.2016. do 05.02.2016. godine. (Nakon ovog termina, evidencija semestra je moguća uz doplatu definisanu cenovnikom škole.)"
-        android:id="@+id/bodyTextView"
+        android:textAppearance="@android:style/TextAppearance.Small"
+
         android:layout_below="@+id/titleTextView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="8dp"
-        android:textSize="15sp"/>
+        android:layout_marginBottom="-15dp"/>
 
     <TextView
         android:layout_width="wrap_content"

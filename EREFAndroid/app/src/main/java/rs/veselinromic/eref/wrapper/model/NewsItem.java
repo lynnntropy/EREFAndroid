@@ -4,17 +4,19 @@ public class NewsItem
 {
     public String date;
     public String title;
-    public String content;
+    public String contentText;
+    public String contentHtml;
 
-    public NewsItem(String date, String title, String content)
+    public NewsItem(String date, String title, String contentText, String contentHtml)
     {
         this.date = date;
         this.title = title;
-        this.content = content;
+        this.contentText = contentText;
+        this.contentHtml = contentHtml;
     }
 
     public String toString()
     {
-        return date + " | " + title + ": " + content.substring(0, 10) + "...";
+        return date + " | " + title + ": " + contentText.substring(0, 10) + "...";
     }
 }

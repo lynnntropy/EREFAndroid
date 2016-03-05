@@ -1,5 +1,7 @@
 package rs.veselinromic.eref.wrapper;
 
+import android.util.Log;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import rs.veselinromic.eref.wrapper.model.*;
@@ -29,15 +31,20 @@ public class Wrapper
         for (Element newsPost : document.select(".posts-news > li"))
         {
             String title = newsPost.select("h1").text().trim();
-            String content = newsPost.select(".posts-summary").text().trim();
+            String contentText = newsPost.select(".posts-summary").text().trim();
+            String contentHtml = newsPost.select(".posts-summary").html().trim();
             String date = newsPost.select(".posts-footer").text().trim();
 
             if (newsPost.select(".posts-content").size() > 0)
             {
-                content += newsPost.select(".posts-content").text().trim();
+                contentText += newsPost.select(".posts-content").text().trim();
+                contentHtml += newsPost.select(".posts-content").html().trim();
             }
 
-            newsItems.add(new NewsItem(date, title, content));
+            // DEBUG
+            Log.i("EREF Wrapper", "NEWS ITEM HTML\n" + contentHtml);
+
+            newsItems.add(new NewsItem(date, title, contentText, contentHtml));
         }
 
         return newsItems;

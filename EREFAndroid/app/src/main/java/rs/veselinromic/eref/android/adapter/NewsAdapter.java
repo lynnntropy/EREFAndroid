@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import org.sufficientlysecure.htmltextview.HtmlTextView;
+
 import java.util.List;
 
 import rs.veselinromic.eref.android.R;
@@ -35,11 +37,12 @@ public class NewsAdapter extends ArrayAdapter<NewsItem>
 
         TextView titleTextView = (TextView) rowView.findViewById(R.id.titleTextView);
         TextView dateTextView = (TextView) rowView.findViewById(R.id.dateTextView);
-        TextView bodyTextView = (TextView) rowView.findViewById(R.id.bodyTextView);
+        HtmlTextView bodyHtmlTextView = (HtmlTextView) rowView.findViewById(R.id.bodyHtmlTextView);
 
         titleTextView.setText(currentNewsItem.title);
         dateTextView.setText(currentNewsItem.date);
-        bodyTextView.setText(currentNewsItem.content);
+//        bodyHtmlTextView.setHtmlFromString(currentNewsItem.contentHtml, new HtmlTextView.RemoteImageGetter());
+        bodyHtmlTextView.setHtmlFromString(currentNewsItem.contentHtml, true);
 
         return rowView;
     }
