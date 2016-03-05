@@ -51,6 +51,20 @@
             </menu>
         </item>
 
-    </group>
+        <item android:title="Ostalo">
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@+id/nav_settings"
+                        android:icon="@drawable/ic_settings_black_24dp"
+                        android:title="Podešavanja"/>
+                    <item
+                        android:id="@+id/nav_about"
+                        android:icon="@drawable/ic_info_black_24dp"
+                        android:title="O Aplikaciji"/>
+                </group>
+            </menu>
+        </item>
 
+    </group>
 </menu>
