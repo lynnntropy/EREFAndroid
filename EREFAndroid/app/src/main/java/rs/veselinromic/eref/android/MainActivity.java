@@ -1,5 +1,6 @@
 package rs.veselinromic.eref.android;
 
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import java.io.IOException;
 
 import rs.veselinromic.eref.android.fragment.EboardNewsFragment;
+import rs.veselinromic.eref.android.fragment.KliseiFragment;
 import rs.veselinromic.eref.android.fragment.NewsFragment;
 import rs.veselinromic.eref.android.fragment.UserProfileFragment;
 import rs.veselinromic.eref.wrapper.Wrapper;
@@ -29,6 +31,8 @@ public class MainActivity extends AppCompatActivity
         EboardNewsFragment.OnFragmentInteractionListener
 
 {
+    public final static int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 100;
+
     @Override
     public void onFragmentInteraction(Uri uri)
     {
@@ -127,10 +131,37 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_profil:
                 transaction.replace(R.id.fragmentContainer, new UserProfileFragment()).commit();
                 break;
+            case R.id.nav_klisei:
+                transaction.replace(R.id.fragmentContainer, new KliseiFragment()).commit();
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+    {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+
+                return;
+            }
+        }
+
     }
 }

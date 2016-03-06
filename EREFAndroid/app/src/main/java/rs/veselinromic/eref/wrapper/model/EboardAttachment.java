@@ -2,8 +2,8 @@ package rs.veselinromic.eref.wrapper.model;
 
 public class EboardAttachment
 {
-    String url;
-    int downloadCount;
+    public String url;
+    public int downloadCount;
 
     public EboardAttachment(String url, int downloadCount)
     {

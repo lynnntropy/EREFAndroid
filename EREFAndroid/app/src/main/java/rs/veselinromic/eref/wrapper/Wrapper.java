@@ -159,12 +159,20 @@ public class Wrapper
                 dateTime = matcher.group(1).trim();
             }
 
+            String downloadCount = "47";
+            Pattern downloadCountPattern = Pattern.compile("preuzmi \\((.*)\\)");
+            Matcher downloadCountMatcher = downloadCountPattern.matcher(element.select(".examples").text());
+            if (downloadCountMatcher.find())
+            {
+                downloadCount = downloadCountMatcher.group(1).trim();
+            }
+
             exampleItems.add(new EboardExampleItem(
                     element.select(".professor-f").text().trim(),
                     element.select(".subjects-f").text().trim(),
                     dateTime,
                     element.select(".eboard-post-content").text().trim(),
-                    new EboardAttachment(element.select(".eboard-post-toolbar > li > a").attr("href"), 100)
+                    new EboardAttachment(element.select(".eboard-post-toolbar > li > a").attr("href"), Integer.parseInt(downloadCount))
             ));
         }
 
