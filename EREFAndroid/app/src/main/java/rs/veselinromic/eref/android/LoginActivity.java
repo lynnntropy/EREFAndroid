@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.IOException;
 
@@ -46,12 +47,12 @@ public class LoginActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(Void aVoid)
         {
-            progressDialog.dismiss();
-
             if (loginSuccess)
             {
+                progressDialog.dismiss();
+
                 Log.i("Login", "Login success!");
-                persistLoginInfo(username, password);
+                if (!storedLoginDetailsExist) persistLoginInfo(username, password);
 
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -62,18 +63,29 @@ public class LoginActivity extends AppCompatActivity
             {
                 Log.e("Login", "Login error!");
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                builder.setMessage("Prijava neuspešna. Proverite korisničko ime i lozinku.");
-                builder.setTitle("Greška");
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                if (!storedLoginDetailsExist)
                 {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
+                    progressDialog.dismiss();
 
-                    }
-                });
-                builder.create().show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                    builder.setMessage("Prijava neuspešna. Proverite korisničko ime i lozinku.");
+                    builder.setTitle("Greška");
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            // dialog.dismiss();
+                        }
+                    });
+
+                    builder.create().show();
+                }
+                else
+                {
+                    Log.i("Login", "Retrying login...");
+                    new LoginTask(username, password).execute();
+                }
             }
         }
 
@@ -89,6 +101,7 @@ public class LoginActivity extends AppCompatActivity
     Button loginButton;
 
     ProgressDialog progressDialog;
+    boolean storedLoginDetailsExist = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -106,6 +119,13 @@ public class LoginActivity extends AppCompatActivity
 
         if (username != null && password != null)
         {
+            storedLoginDetailsExist = true;
+
+            usernameEditText.setVisibility(View.INVISIBLE);
+            passwordEditText.setVisibility(View.INVISIBLE);
+            loginButton.setVisibility(View.INVISIBLE);
+            findViewById(R.id.textView).setVisibility(View.INVISIBLE);
+
             login(username, password);
         }
 
@@ -119,8 +139,6 @@ public class LoginActivity extends AppCompatActivity
                 login(username, password);
             }
         });
-
-
     }
 
     void login(String username, String password)

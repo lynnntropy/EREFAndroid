@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,6 +60,8 @@ public class NewsFragment extends Fragment
 //                        new ArrayAdapter<NewsItem>(getActivity(), android.R.layout.simple_list_item_1, this.newsItemList));
 
                 newsListView.setAdapter(newsAdapter);
+
+//                swipeRefreshLayout.setRefreshing(false);
             }
         }
     }
@@ -102,6 +105,8 @@ public class NewsFragment extends Fragment
         }
     }
 
+//    SwipeRefreshLayout swipeRefreshLayout;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -109,6 +114,15 @@ public class NewsFragment extends Fragment
         View rootView = inflater.inflate(R.layout.fragment_news, container, false);
 
         this.newsListView = (ListView) rootView.findViewById(R.id.newsListView);
+//        this.swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+//        this.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+//        {
+//            @Override
+//            public void onRefresh()
+//            {
+//                new GetNewsTask().execute();
+//            }
+//        });
 
         new GetNewsTask().execute();
 

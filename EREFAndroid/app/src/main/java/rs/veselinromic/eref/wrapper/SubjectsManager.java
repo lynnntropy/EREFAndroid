@@ -25,12 +25,13 @@ public class SubjectsManager
             String semester = subjectRow.select("td").get(0).text().trim();
             if (semester.equals("Semestar")) continue; // Skip the header row.
 
+            int semesterInt = Integer.parseInt(semester);
             String title = subjectRow.select("td").get(2).text().trim();
             String ectsCount = subjectRow.select("td").get(3).text().trim();
             String pointCount = subjectRow.select("td").get(8).text().trim();
             String grade = subjectRow.select("td").get(9).text().trim();
 
-            subjects.add(new Subject(semester, title, ectsCount, pointCount, grade));
+            subjects.add(new Subject(semesterInt, title, ectsCount, pointCount, grade));
         }
 
         return subjects;

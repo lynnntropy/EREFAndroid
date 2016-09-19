@@ -1,10 +1,13 @@
 package rs.veselinromic.eref.android;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,9 +21,12 @@ import android.widget.TextView;
 
 import java.io.IOException;
 
+import rs.veselinromic.eref.android.fragment.AboutFragment;
 import rs.veselinromic.eref.android.fragment.EboardNewsFragment;
 import rs.veselinromic.eref.android.fragment.KliseiFragment;
 import rs.veselinromic.eref.android.fragment.NewsFragment;
+import rs.veselinromic.eref.android.fragment.ResultsFragment;
+import rs.veselinromic.eref.android.fragment.SubjectsFragment;
 import rs.veselinromic.eref.android.fragment.UserProfileFragment;
 import rs.veselinromic.eref.wrapper.Wrapper;
 import rs.veselinromic.eref.wrapper.model.UserProfile;
@@ -28,10 +34,13 @@ import rs.veselinromic.eref.wrapper.model.UserProfile;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         NewsFragment.OnFragmentInteractionListener,
-        EboardNewsFragment.OnFragmentInteractionListener
+        EboardNewsFragment.OnFragmentInteractionListener,
+        ResultsFragment.OnFragmentInteractionListener
 
 {
     public final static int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 100;
+
+
 
     @Override
     public void onFragmentInteraction(Uri uri)
@@ -115,7 +124,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item)
     {
-        setTitle(item.getTitle());
+        // setTitle(item.getTitle());
 
         int id = item.getItemId();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -124,15 +133,45 @@ public class MainActivity extends AppCompatActivity
         {
             case R.id.nav_vtsvesti:
                 transaction.replace(R.id.fragmentContainer, new NewsFragment()).commit();
-                break;
-            case R.id.nav_etablavesti:
-                transaction.replace(R.id.fragmentContainer, new EboardNewsFragment()).commit();
+                setTitle("VTŠ Vesti");
                 break;
             case R.id.nav_profil:
                 transaction.replace(R.id.fragmentContainer, new UserProfileFragment()).commit();
+                setTitle("Profil");
+                break;
+            case R.id.nav_predmeti:
+                transaction.replace(R.id.fragmentContainer, new SubjectsFragment()).commit();
+                setTitle("Predmeti");
+                break;
+            case R.id.nav_etablavesti:
+                transaction.replace(R.id.fragmentContainer, new EboardNewsFragment()).commit();
+                setTitle("E-tabla - Vesti");
                 break;
             case R.id.nav_klisei:
                 transaction.replace(R.id.fragmentContainer, new KliseiFragment()).commit();
+                setTitle("E-tabla - Klišei");
+                break;
+            case R.id.nav_rezultati:
+                transaction.replace(R.id.fragmentContainer, new ResultsFragment()).commit();
+                setTitle("E-tabla - Rezultati");
+                break;
+
+            case R.id.nav_about:
+                transaction.replace(R.id.fragmentContainer, new AboutFragment()).commit();
+                setTitle("O aplikaciji");
+                break;
+
+            case R.id.nav_logout:
+                SharedPreferences loginPreferences = getSharedPreferences("loginDetails", 0);
+                SharedPreferences.Editor editor = loginPreferences.edit();
+                editor.remove("username");
+                editor.remove("password");
+                editor.commit();
+
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
                 break;
         }
 

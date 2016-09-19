@@ -17,25 +17,26 @@ import java.util.List;
 
 import rs.veselinromic.eref.android.R;
 import rs.veselinromic.eref.android.adapter.EboardNewsAdapter;
+import rs.veselinromic.eref.android.adapter.EboardResultsAdapter;
 import rs.veselinromic.eref.wrapper.Wrapper;
-import rs.veselinromic.eref.wrapper.model.EboardNewsItem;
+import rs.veselinromic.eref.wrapper.model.EboardResultsItem;
 
-public class EboardNewsFragment extends Fragment
+public class ResultsFragment extends Fragment
 {
-    class GetEboardNewsTask extends AsyncTask<Void, Void, Void>
+    class GetResultsTask extends AsyncTask<Void, Void, Void>
     {
-        List<EboardNewsItem> eboardNewsItems;
+        List<EboardResultsItem> results;
 
         @Override
         protected Void doInBackground(Void... params)
         {
             try
             {
-                this.eboardNewsItems = Wrapper.getEboardNews();
+                this.results = Wrapper.getEboardResults();
             }
             catch (IOException e)
             {
-                Log.e("GetEboardNews", "e", e);
+                Log.e("GetResults", "e", e);
             }
 
             return null;
@@ -44,10 +45,10 @@ public class EboardNewsFragment extends Fragment
         @Override
         protected void onPostExecute(Void aVoid)
         {
-            if (this.eboardNewsItems != null)
+            if (this.results != null)
             {
-                EboardNewsAdapter eboardNewsAdapter = new EboardNewsAdapter(getActivity(), this.eboardNewsItems);
-                eboardNewsListView.setAdapter(eboardNewsAdapter);
+                EboardResultsAdapter eboardResultsAdapter = new EboardResultsAdapter(getActivity(), this.results);
+                listView.setAdapter(eboardResultsAdapter);
             }
 
             swipeRefreshLayout.setRefreshing(false);
@@ -56,10 +57,10 @@ public class EboardNewsFragment extends Fragment
 
     private OnFragmentInteractionListener mListener;
 
-    ListView eboardNewsListView;
+    ListView listView;
     SwipeRefreshLayout swipeRefreshLayout;
 
-    public EboardNewsFragment()
+    public ResultsFragment()
     {
         // Required empty public constructor
     }
@@ -81,20 +82,20 @@ public class EboardNewsFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_eboard_news, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_results, container, false);
 
-        this.eboardNewsListView = (ListView) rootView.findViewById(R.id.eboardNewsListView);
+        this.listView = (ListView) rootView.findViewById(R.id.listView);
         this.swipeRefreshLayout = (SwipeRefreshLayout)rootView.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
         {
             @Override
             public void onRefresh()
             {
-                new GetEboardNewsTask().execute();
+                new GetResultsTask().execute();
             }
         });
 
-        new GetEboardNewsTask().execute();
+        new GetResultsTask().execute();
 
         return rootView;
     }

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,10 +53,13 @@ public class KliseiFragment extends Fragment
                 EboardExamplesAdapter eboardExamplesAdapter = new EboardExamplesAdapter(getActivity(), this.exampleItemList);
                 list.setAdapter(eboardExamplesAdapter);
             }
+
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 
     ListView list;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     public KliseiFragment()
     {
@@ -70,6 +74,15 @@ public class KliseiFragment extends Fragment
         View rootView = inflater.inflate(R.layout.fragment_klisei, container, false);
 
         this.list = (ListView) rootView.findViewById(R.id.list);
+        this.swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh()
+            {
+                new GetExamplesTask().execute();
+            }
+        });
 
         if (ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)

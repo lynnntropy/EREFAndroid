@@ -4,6 +4,7 @@ package rs.veselinromic.eref.android.fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +51,8 @@ public class UserProfileFragment extends Fragment
                 UserProfileListAdapter userProfileListAdapter = new UserProfileListAdapter(getActivity(), userProfile.userData);
                 listView.setAdapter(userProfileListAdapter);
             }
+
+//            swipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -58,6 +61,7 @@ public class UserProfileFragment extends Fragment
     TextView tuitionCreditView;
 
     ListView listView;
+//    SwipeRefreshLayout swipeRefreshLayout;
 
     public UserProfileFragment()
     {
@@ -74,6 +78,16 @@ public class UserProfileFragment extends Fragment
         this.generalCreditView = (TextView) rootView.findViewById(R.id.generalCreditView);
         this.tuitionCreditView = (TextView) rootView.findViewById(R.id.tuitionCreditView);
         this.listView = (ListView) rootView.findViewById(R.id.listView);
+
+//        this.swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+//        {
+//            @Override
+//            public void onRefresh()
+//            {
+//                new GetUserProfileTask().execute();
+//            }
+//        });
 
         new GetUserProfileTask().execute();
 

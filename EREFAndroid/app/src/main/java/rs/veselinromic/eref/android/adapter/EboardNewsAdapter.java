@@ -36,19 +36,16 @@ public class EboardNewsAdapter extends ArrayAdapter<EboardNewsItem>
 
         EboardNewsItem currentNewsItem = this.objects.get(position);
 
-        TextView posterTextView = (TextView) rowView.findViewById(R.id.posterTextView);
-        TextView subjectTextView = (TextView) rowView.findViewById(R.id.subjectTextView);
-        TextView dateTimeTextView = (TextView) rowView.findViewById(R.id.dateTimeTextView);
+        TextView metadataTextView = (TextView) rowView.findViewById(R.id.metadataTextView);
         TextView titleTextView = (TextView) rowView.findViewById(R.id.titleTextView);
         HtmlTextView contentHtmlView = (HtmlTextView) rowView.findViewById(R.id.contentHtmlTextView);
 
         if (currentNewsItem.subject == null || currentNewsItem.subject.trim().equals(""))
             currentNewsItem.subject = "Opšta Informacija";
 
-        posterTextView.setText("Postavio: " + currentNewsItem.submitter);
-        subjectTextView.setText("Predmet: " + currentNewsItem.subject);
         titleTextView.setText(currentNewsItem.title);
-        dateTimeTextView.setText(currentNewsItem.dateTime);
+        metadataTextView.setText(String.format("Postavio/la: %s\nPredmet: %s\nDatum i vreme: %s",
+                currentNewsItem.submitter, currentNewsItem.subject, currentNewsItem.dateTime));
         contentHtmlView.setHtmlFromString(currentNewsItem.bodyHtml, true);
 
         return rowView;

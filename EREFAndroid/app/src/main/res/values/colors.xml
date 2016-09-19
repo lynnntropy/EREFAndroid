@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#000000</color>
 
     <color name="transparent">#00000000</color>
     <!-- card colors -->
@@ -10,4 +10,9 @@
     <color name="card_shadow_1">#d4d4d4</color>
     <color name="card_shadow_2">#dddddd</color>
     <color name="card_detailing">#eee</color>
+
+    <color name="subject_passed">#C8E6C9</color>
+    <color name="subject_failing">#FFF9C4</color>
+    <color name="subject_future_mandatory">#2664ff</color>
+    <color name="subject_future_optional">#96afff</color>
 </resources>

@@ -18,6 +18,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.sufficientlysecure.htmltextview.HtmlTextView;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -30,8 +32,9 @@ import ch.boye.httpclientandroidlib.client.methods.HttpGet;
 import rs.veselinromic.eref.android.R;
 import rs.veselinromic.eref.wrapper.Network;
 import rs.veselinromic.eref.wrapper.model.EboardExampleItem;
+import rs.veselinromic.eref.wrapper.model.EboardResultsItem;
 
-public class EboardExamplesAdapter extends ArrayAdapter<EboardExampleItem>
+public class EboardResultsAdapter extends ArrayAdapter<EboardResultsItem>
 {
     class GetFileTask extends AsyncTask<Void, Void, Void>
     {
@@ -93,10 +96,10 @@ public class EboardExamplesAdapter extends ArrayAdapter<EboardExampleItem>
     }
 
     Context context;
-    List<EboardExampleItem> objects;
+    List<EboardResultsItem> objects;
 
 
-    public EboardExamplesAdapter(Context context, List<EboardExampleItem> objects)
+    public EboardResultsAdapter(Context context, List<EboardResultsItem> objects)
     {
         super(context, -1, objects);
 
@@ -108,44 +111,64 @@ public class EboardExamplesAdapter extends ArrayAdapter<EboardExampleItem>
     public View getView(int position, View convertView, ViewGroup parent)
     {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = layoutInflater.inflate(R.layout.row_klisei, parent, false);
+        View rowView = layoutInflater.inflate(R.layout.row_result, parent, false);
 
-        final EboardExampleItem currentItem = this.objects.get(position);
+        final EboardResultsItem currentItem = this.objects.get(position);
 
         File myDirectory = new File(Environment.getExternalStorageDirectory(), "eref");
         myDirectory.mkdirs();
 
-        final String filePath = myDirectory.getAbsolutePath() + "/" + currentItem.filename;
+        final String filePath = myDirectory.getAbsolutePath() + "/" + currentItem.dateTime;
 
-        TextView title = (TextView) rowView.findViewById(R.id.titleTextView);
+//        TextView submitter = (TextView) rowView.findViewById(R.id.submitter);
+//        TextView dateTime = (TextView) rowView.findViewById(R.id.dateTime);
+//        TextView subject = (TextView) rowView.findViewById(R.id.subject);
         TextView metadataTextView = (TextView) rowView.findViewById(R.id.metadataTextView);
-        TextView body = (TextView) rowView.findViewById(R.id.body);
+        TextView titleTextView = (TextView) rowView.findViewById(R.id.titleTextView);
+        HtmlTextView body = (HtmlTextView) rowView.findViewById(R.id.body);
+        // TextView filename = (TextView) rowView.findViewById(R.id.filename);
         final Button downloadButton = (Button) rowView.findViewById(R.id.download);
-        title.setText("Kliše za: " + currentItem.subject);
-        metadataTextView.setText(String.format("Postavio/la: %s\nDatum i vreme: %s",
-                currentItem.submitter, currentItem.dateTime));
-        body.setText(currentItem.filename);
+
+//        submitter.setText("Postavio: " + currentItem.submitter);
+//        dateTime.setText(currentItem.dateTime);
+//        subject.setText("Predmet: " + currentItem.subject);
+        metadataTextView.setText(String.format("Postavio/la: %s\nPredmet: %s\nDatum i vreme: %s",
+                currentItem.submitter, currentItem.subject, currentItem.dateTime));
+
+        titleTextView.setText(currentItem.title);
+        body.setHtmlFromString(currentItem.body, true);
+        //currentItem.
 
         File file = new File(filePath);
         if (!file.exists())
         {
-            downloadButton.setText(String.format("Preuzmi (%s)", currentItem.attachment.downloadCount));
-            downloadButton.setOnClickListener(new View.OnClickListener()
+            if (currentItem.attachment != null)
             {
-                @Override
-                public void onClick(View v)
+                downloadButton.setText("Preuzmi");
+                downloadButton.setOnClickListener(new View.OnClickListener()
                 {
-                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            == PackageManager.PERMISSION_GRANTED)
+                    @Override
+                    public void onClick(View v)
                     {
-                        String fullPath = "https://eref.vts.su.ac.rs" + currentItem.attachment.url;
-                        new GetFileTask(fullPath, filePath).execute();
+                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                == PackageManager.PERMISSION_GRANTED)
+                        {
+                            String fullPath = "https://eref.vts.su.ac.rs" + currentItem.attachment.url;
+                            new GetFileTask(fullPath, filePath).execute();
 
-                        downloadButton.setEnabled(false);
-                        downloadButton.setText("Preuzimanje u toku...");
+                            downloadButton.setEnabled(false);
+                            downloadButton.setAlpha(0.5f);
+                            downloadButton.setText("Preuzimanje u toku...");
+                        }
                     }
-                }
-            });
+                });
+            }
+            else
+            {
+                downloadButton.setEnabled(false);
+                downloadButton.setAlpha(0.5f);
+                downloadButton.setText("Bez Fajla");
+            }
         }
         else
         {
@@ -158,7 +181,6 @@ public class EboardExamplesAdapter extends ArrayAdapter<EboardExampleItem>
                     if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                             == PackageManager.PERMISSION_GRANTED)
                     {
-
                         Uri uri = Uri.fromFile(new File((filePath)));
                         String mime = getMimeType(uri);
 

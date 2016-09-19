@@ -41,9 +41,6 @@ public class Wrapper
                 contentHtml += newsPost.select(".posts-content").html().trim();
             }
 
-            // DEBUG
-            Log.i("EREF Wrapper", "NEWS ITEM HTML\n" + contentHtml);
-
             newsItems.add(new NewsItem(date, title, contentText, contentHtml));
         }
 
@@ -135,7 +132,7 @@ public class Wrapper
                     dateTime,
                     element.select(".eboard-post-top > b").text(),
                     element.select(".eboard-post-title").text().trim(),
-                    element.select(".eboard-post-content").text().trim(),
+                    element.select(".eboard-post-content").html().trim(),
                     eboardAttachment
             ));
         }

@@ -4,8 +4,6 @@
              android:layout_height="match_parent"
              tools:context=".fragment.UserProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,4 +44,5 @@
         android:layout_marginTop="5dp"
         android:divider="@null"
         android:layout_marginLeft="50dp"/>
+
 </RelativeLayout>
