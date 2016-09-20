@@ -32,6 +32,7 @@ public class UserProfileFragment extends Fragment
     class GetUserProfileTask extends AsyncTask<Void, Void, Void>
     {
         UserProfile userProfile;
+        AnimatorSet loadingAnimation;
 
         @Override
         protected Void doInBackground(Void... params)
@@ -43,7 +44,7 @@ public class UserProfileFragment extends Fragment
                     @Override
                     public void run()
                     {
-                        AnimatorSet loadingAnimation = new AnimatorSet();
+                        loadingAnimation = new AnimatorSet();
                         ValueAnimator listFade = ObjectAnimator.ofFloat(listView, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
                         ValueAnimator tableFade = ObjectAnimator.ofFloat(tableLayout, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
                         ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
@@ -67,7 +68,8 @@ public class UserProfileFragment extends Fragment
         {
             try
             {
-                AnimatorSet loadingAnimation = new AnimatorSet();
+                if (loadingAnimation.isRunning()) loadingAnimation.cancel();
+                loadingAnimation = new AnimatorSet();
                 ValueAnimator listFade = ObjectAnimator.ofFloat(listView, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
                 ValueAnimator tableFade = ObjectAnimator.ofFloat(tableLayout, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
                 ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));

@@ -39,6 +39,7 @@ public class NewsFragment extends Fragment
     class GetNewsTask extends AsyncTask<Void, Void, Void>
     {
         List<NewsItem> newsItemList;
+        AnimatorSet loadingAnimation;
 
         @Override
         protected Void doInBackground(Void... params)
@@ -50,7 +51,7 @@ public class NewsFragment extends Fragment
                     @Override
                     public void run()
                     {
-                        AnimatorSet loadingAnimation = new AnimatorSet();
+                        loadingAnimation = new AnimatorSet();
                         ValueAnimator listFade = ObjectAnimator.ofFloat(newsListView, "alpha", 1f, 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
                         ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 0f, 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
                         loadingAnimation.play(listFade).before(progressIndicatorFade);
@@ -75,7 +76,8 @@ public class NewsFragment extends Fragment
             {
                 swipeRefreshLayout.setRefreshing(false);
 
-                AnimatorSet loadingAnimation = new AnimatorSet();
+                if (loadingAnimation.isRunning()) loadingAnimation.cancel();
+                loadingAnimation = new AnimatorSet();
                 ValueAnimator listFade = ObjectAnimator.ofFloat(newsListView, "alpha", 0f, 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
                 ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 1f, 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
                 loadingAnimation.play(progressIndicatorFade).before(listFade);

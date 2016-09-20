@@ -31,6 +31,7 @@ public class ResultsFragment extends Fragment
     class GetResultsTask extends AsyncTask<Void, Void, Void>
     {
         List<EboardResultsItem> results;
+        AnimatorSet loadingAnimation;
 
         @Override
         protected Void doInBackground(Void... params)
@@ -42,7 +43,7 @@ public class ResultsFragment extends Fragment
                     @Override
                     public void run()
                     {
-                        AnimatorSet loadingAnimation = new AnimatorSet();
+                        loadingAnimation = new AnimatorSet();
                         ValueAnimator listFade = ObjectAnimator.ofFloat(listView, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
                         ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
                         loadingAnimation.play(listFade).before(progressIndicatorFade);
@@ -65,7 +66,8 @@ public class ResultsFragment extends Fragment
         {
             try
             {
-                AnimatorSet loadingAnimation = new AnimatorSet();
+                if (loadingAnimation.isRunning()) loadingAnimation.cancel();
+                loadingAnimation = new AnimatorSet();
                 ValueAnimator listFade = ObjectAnimator.ofFloat(listView, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
                 ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
                 loadingAnimation.play(listFade).after(progressIndicatorFade);

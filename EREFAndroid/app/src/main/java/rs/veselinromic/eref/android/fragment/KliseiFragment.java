@@ -34,6 +34,7 @@ public class KliseiFragment extends Fragment
     class GetExamplesTask extends AsyncTask<Void, Void, Void>
     {
         List<EboardExampleItem> exampleItemList;
+        AnimatorSet loadingAnimation;
 
         @Override
         protected Void doInBackground(Void... params)
@@ -45,7 +46,7 @@ public class KliseiFragment extends Fragment
                     @Override
                     public void run()
                     {
-                        AnimatorSet loadingAnimation = new AnimatorSet();
+                        loadingAnimation = new AnimatorSet();
                         ValueAnimator listFade = ObjectAnimator.ofFloat(list, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
                         ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
                         loadingAnimation.play(listFade).before(progressIndicatorFade);
@@ -68,7 +69,8 @@ public class KliseiFragment extends Fragment
         {
             try
             {
-                AnimatorSet loadingAnimation = new AnimatorSet();
+                if (loadingAnimation.isRunning()) loadingAnimation.cancel();
+                loadingAnimation = new AnimatorSet();
                 ValueAnimator listFade = ObjectAnimator.ofFloat(list, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
                 ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
                 loadingAnimation.play(listFade).after(progressIndicatorFade);
