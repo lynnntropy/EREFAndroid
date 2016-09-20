@@ -1,5 +1,8 @@
 package rs.veselinromic.eref.android.fragment;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -12,8 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.github.ybq.android.spinkit.SpinKitView;
+
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.RunnableFuture;
 
 import rs.veselinromic.eref.android.R;
 import rs.veselinromic.eref.android.adapter.NewsAdapter;
@@ -37,6 +43,19 @@ public class NewsFragment extends Fragment
         @Override
         protected Void doInBackground(Void... params)
         {
+            getActivity().runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    AnimatorSet loadingAnimation = new AnimatorSet();
+                    ValueAnimator listFade = ObjectAnimator.ofFloat(newsListView, "alpha", 1f, 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                    ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 0f, 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                    loadingAnimation.play(listFade).before(progressIndicatorFade);
+                    loadingAnimation.start();
+                }
+            });
+
             try
             {
                 this.newsItemList = Wrapper.getNews();
@@ -52,16 +71,18 @@ public class NewsFragment extends Fragment
         @Override
         protected void onPostExecute(Void aVoid)
         {
+            swipeRefreshLayout.setRefreshing(false);
+
+            AnimatorSet loadingAnimation = new AnimatorSet();
+            ValueAnimator listFade = ObjectAnimator.ofFloat(newsListView, "alpha", 0f, 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+            ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 1f, 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+            loadingAnimation.play(progressIndicatorFade).before(listFade);
+            loadingAnimation.start();
+
             if (this.newsItemList != null)
             {
                 NewsAdapter newsAdapter = new NewsAdapter(getActivity(), this.newsItemList);
-
-//                NewsFragment.this.newsListView.setAdapter(
-//                        new ArrayAdapter<NewsItem>(getActivity(), android.R.layout.simple_list_item_1, this.newsItemList));
-
                 newsListView.setAdapter(newsAdapter);
-
-//                swipeRefreshLayout.setRefreshing(false);
             }
         }
     }
@@ -69,6 +90,8 @@ public class NewsFragment extends Fragment
     private OnFragmentInteractionListener mListener;
 
     ListView newsListView;
+    SpinKitView progressIndicator;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     public NewsFragment()
     {
@@ -123,6 +146,18 @@ public class NewsFragment extends Fragment
 //                new GetNewsTask().execute();
 //            }
 //        });
+
+        this.progressIndicator = (SpinKitView) rootView.findViewById(R.id.progressIndicator);
+
+        this.swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+        this.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh()
+            {
+                new GetNewsTask().execute();
+            }
+        });
 
         new GetNewsTask().execute();
 

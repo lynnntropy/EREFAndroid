@@ -1,5 +1,8 @@
 package rs.veselinromic.eref.android.fragment;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -11,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import com.github.ybq.android.spinkit.SpinKitView;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,6 +34,19 @@ public class EboardNewsFragment extends Fragment
         @Override
         protected Void doInBackground(Void... params)
         {
+            getActivity().runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    AnimatorSet loadingAnimation = new AnimatorSet();
+                    ValueAnimator listFade = ObjectAnimator.ofFloat(eboardNewsListView, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                    ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                    loadingAnimation.play(listFade).before(progressIndicatorFade);
+                    loadingAnimation.start();
+                }
+            });
+
             try
             {
                 this.eboardNewsItems = Wrapper.getEboardNews();
@@ -44,6 +62,12 @@ public class EboardNewsFragment extends Fragment
         @Override
         protected void onPostExecute(Void aVoid)
         {
+            AnimatorSet loadingAnimation = new AnimatorSet();
+            ValueAnimator listFade = ObjectAnimator.ofFloat(eboardNewsListView, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+            ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+            loadingAnimation.play(listFade).after(progressIndicatorFade);
+            loadingAnimation.start();
+
             if (this.eboardNewsItems != null)
             {
                 EboardNewsAdapter eboardNewsAdapter = new EboardNewsAdapter(getActivity(), this.eboardNewsItems);
@@ -58,6 +82,7 @@ public class EboardNewsFragment extends Fragment
 
     ListView eboardNewsListView;
     SwipeRefreshLayout swipeRefreshLayout;
+    SpinKitView progressIndicator;
 
     public EboardNewsFragment()
     {
@@ -93,6 +118,7 @@ public class EboardNewsFragment extends Fragment
                 new GetEboardNewsTask().execute();
             }
         });
+        this.progressIndicator = (SpinKitView) rootView.findViewById(R.id.progressIndicator);
 
         new GetEboardNewsTask().execute();
 

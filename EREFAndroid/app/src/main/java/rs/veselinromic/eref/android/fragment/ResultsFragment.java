@@ -1,5 +1,8 @@
 package rs.veselinromic.eref.android.fragment;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -11,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import com.github.ybq.android.spinkit.SpinKitView;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,6 +35,19 @@ public class ResultsFragment extends Fragment
         @Override
         protected Void doInBackground(Void... params)
         {
+            getActivity().runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    AnimatorSet loadingAnimation = new AnimatorSet();
+                    ValueAnimator listFade = ObjectAnimator.ofFloat(listView, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                    ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                    loadingAnimation.play(listFade).before(progressIndicatorFade);
+                    loadingAnimation.start();
+                }
+            });
+
             try
             {
                 this.results = Wrapper.getEboardResults();
@@ -45,6 +63,12 @@ public class ResultsFragment extends Fragment
         @Override
         protected void onPostExecute(Void aVoid)
         {
+            AnimatorSet loadingAnimation = new AnimatorSet();
+            ValueAnimator listFade = ObjectAnimator.ofFloat(listView, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+            ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+            loadingAnimation.play(listFade).after(progressIndicatorFade);
+            loadingAnimation.start();
+
             if (this.results != null)
             {
                 EboardResultsAdapter eboardResultsAdapter = new EboardResultsAdapter(getActivity(), this.results);
@@ -59,6 +83,7 @@ public class ResultsFragment extends Fragment
 
     ListView listView;
     SwipeRefreshLayout swipeRefreshLayout;
+    SpinKitView progressIndicator;
 
     public ResultsFragment()
     {
@@ -94,6 +119,7 @@ public class ResultsFragment extends Fragment
                 new GetResultsTask().execute();
             }
         });
+        this.progressIndicator = (SpinKitView)  rootView.findViewById(R.id.progressIndicator);
 
         new GetResultsTask().execute();
 

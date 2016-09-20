@@ -1,6 +1,9 @@
 package rs.veselinromic.eref.android.fragment;
 
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.github.ybq.android.spinkit.SpinKitView;
 
 import java.io.IOException;
 import java.util.List;
@@ -33,6 +38,22 @@ public class SubjectsFragment extends Fragment
         @Override
         protected Void doInBackground(Void... params)
         {
+            getActivity().runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    AnimatorSet loadingAnimation = new AnimatorSet();
+                    ValueAnimator listFade = ObjectAnimator.ofFloat(listView, "alpha", 1f, 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                    ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 0f, 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                    loadingAnimation.play(listFade).before(progressIndicatorFade);
+                    loadingAnimation.start();
+
+//                    newsListView.animate().alpha(0f).setDuration(500);
+//                    progressIndicator.animate().alpha(1f).setDuration(500).setStartDelay(500);
+                }
+            });
+
             try
             {
                 this.subjectList = SubjectsManager.getSubjects();
@@ -49,6 +70,12 @@ public class SubjectsFragment extends Fragment
         protected void onPostExecute(Void aVoid)
         {
             swipeRefreshLayout.setRefreshing(false);
+
+            AnimatorSet loadingAnimation = new AnimatorSet();
+            ValueAnimator listFade = ObjectAnimator.ofFloat(listView, "alpha", 0f, 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+            ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 1f, 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+            loadingAnimation.play(progressIndicatorFade).before(listFade);
+            loadingAnimation.start();
 
             if (subjectList != null)
             {
@@ -70,6 +97,7 @@ public class SubjectsFragment extends Fragment
     ListView listView;
     SwipeRefreshLayout swipeRefreshLayout;
     SubjectsAdapter subjectsAdapter;
+    SpinKitView progressIndicator;
 
     public SubjectsFragment()
     {
@@ -96,6 +124,8 @@ public class SubjectsFragment extends Fragment
                 new GetSubjectsTask().execute();
             }
         });
+
+        this.progressIndicator = (SpinKitView) rootView.findViewById(R.id.progressIndicator);
 
         new GetSubjectsTask().execute();
 

@@ -2,6 +2,9 @@ package rs.veselinromic.eref.android.fragment;
 
 
 import android.Manifest;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +17,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import com.github.ybq.android.spinkit.SpinKitView;
 
 import java.io.IOException;
 import java.util.List;
@@ -33,6 +38,19 @@ public class KliseiFragment extends Fragment
         @Override
         protected Void doInBackground(Void... params)
         {
+            getActivity().runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    AnimatorSet loadingAnimation = new AnimatorSet();
+                    ValueAnimator listFade = ObjectAnimator.ofFloat(list, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                    ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                    loadingAnimation.play(listFade).before(progressIndicatorFade);
+                    loadingAnimation.start();
+                }
+            });
+
             try
             {
                 this.exampleItemList = Wrapper.getEboardExamples();
@@ -48,6 +66,12 @@ public class KliseiFragment extends Fragment
         @Override
         protected void onPostExecute(Void aVoid)
         {
+            AnimatorSet loadingAnimation = new AnimatorSet();
+            ValueAnimator listFade = ObjectAnimator.ofFloat(list, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+            ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+            loadingAnimation.play(listFade).after(progressIndicatorFade);
+            loadingAnimation.start();
+
             if (this.exampleItemList != null)
             {
                 EboardExamplesAdapter eboardExamplesAdapter = new EboardExamplesAdapter(getActivity(), this.exampleItemList);
@@ -60,6 +84,7 @@ public class KliseiFragment extends Fragment
 
     ListView list;
     SwipeRefreshLayout swipeRefreshLayout;
+    SpinKitView progressIndicator;
 
     public KliseiFragment()
     {
@@ -83,6 +108,7 @@ public class KliseiFragment extends Fragment
                 new GetExamplesTask().execute();
             }
         });
+        this.progressIndicator = (SpinKitView) rootView.findViewById(R.id.progressIndicator);
 
         if (ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
