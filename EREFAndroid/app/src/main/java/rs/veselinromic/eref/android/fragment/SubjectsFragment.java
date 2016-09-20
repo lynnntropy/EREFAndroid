@@ -38,27 +38,24 @@ public class SubjectsFragment extends Fragment
         @Override
         protected Void doInBackground(Void... params)
         {
-            getActivity().runOnUiThread(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    AnimatorSet loadingAnimation = new AnimatorSet();
-                    ValueAnimator listFade = ObjectAnimator.ofFloat(listView, "alpha", 1f, 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
-                    ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 0f, 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
-                    loadingAnimation.play(listFade).before(progressIndicatorFade);
-                    loadingAnimation.start();
-
-//                    newsListView.animate().alpha(0f).setDuration(500);
-//                    progressIndicator.animate().alpha(1f).setDuration(500).setStartDelay(500);
-                }
-            });
-
             try
             {
+                getActivity().runOnUiThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        AnimatorSet loadingAnimation = new AnimatorSet();
+                        ValueAnimator listFade = ObjectAnimator.ofFloat(listView, "alpha", 1f, 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                        ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 0f, 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                        loadingAnimation.play(listFade).before(progressIndicatorFade);
+                        loadingAnimation.start();
+                    }
+                });
+
                 this.subjectList = SubjectsManager.getSubjects();
             }
-            catch (IOException e)
+            catch (Exception e)
             {
                 Log.e("GetUserProfile", "e", e);
             }
@@ -69,27 +66,34 @@ public class SubjectsFragment extends Fragment
         @Override
         protected void onPostExecute(Void aVoid)
         {
-            swipeRefreshLayout.setRefreshing(false);
-
-            AnimatorSet loadingAnimation = new AnimatorSet();
-            ValueAnimator listFade = ObjectAnimator.ofFloat(listView, "alpha", 0f, 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
-            ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 1f, 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
-            loadingAnimation.play(progressIndicatorFade).before(listFade);
-            loadingAnimation.start();
-
-            if (subjectList != null)
+            try
             {
-                if (subjectsAdapter == null)
+                swipeRefreshLayout.setRefreshing(false);
+
+                AnimatorSet loadingAnimation = new AnimatorSet();
+                ValueAnimator listFade = ObjectAnimator.ofFloat(listView, "alpha", 0f, 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 1f, 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                loadingAnimation.play(progressIndicatorFade).before(listFade);
+                loadingAnimation.start();
+
+                if (subjectList != null)
                 {
-                    subjectsAdapter = new SubjectsAdapter(getActivity(), subjectList);
-                    listView.setAdapter(subjectsAdapter);
+                    if (subjectsAdapter == null)
+                    {
+                        subjectsAdapter = new SubjectsAdapter(getActivity(), subjectList);
+                        listView.setAdapter(subjectsAdapter);
+                    }
+                    else
+                    {
+                        subjectsAdapter.clear();
+                        subjectsAdapter.addAll(subjectList);
+                        subjectsAdapter.notifyDataSetChanged();
+                    }
                 }
-                else
-                {
-                    subjectsAdapter.clear();
-                    subjectsAdapter.addAll(subjectList);
-                    subjectsAdapter.notifyDataSetChanged();
-                }
+            }
+            catch (Exception e)
+            {
+                Log.e("Error", "e", e);
             }
         }
     }

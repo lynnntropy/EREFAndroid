@@ -43,24 +43,24 @@ public class NewsFragment extends Fragment
         @Override
         protected Void doInBackground(Void... params)
         {
-            getActivity().runOnUiThread(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    AnimatorSet loadingAnimation = new AnimatorSet();
-                    ValueAnimator listFade = ObjectAnimator.ofFloat(newsListView, "alpha", 1f, 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
-                    ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 0f, 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
-                    loadingAnimation.play(listFade).before(progressIndicatorFade);
-                    loadingAnimation.start();
-                }
-            });
-
             try
             {
+                getActivity().runOnUiThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        AnimatorSet loadingAnimation = new AnimatorSet();
+                        ValueAnimator listFade = ObjectAnimator.ofFloat(newsListView, "alpha", 1f, 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                        ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 0f, 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                        loadingAnimation.play(listFade).before(progressIndicatorFade);
+                        loadingAnimation.start();
+                    }
+                });
+
                 this.newsItemList = Wrapper.getNews();
             }
-            catch (IOException e)
+            catch (Exception e)
             {
                 Log.e("GetNewsTask", "e", e);
             }
@@ -71,18 +71,25 @@ public class NewsFragment extends Fragment
         @Override
         protected void onPostExecute(Void aVoid)
         {
-            swipeRefreshLayout.setRefreshing(false);
-
-            AnimatorSet loadingAnimation = new AnimatorSet();
-            ValueAnimator listFade = ObjectAnimator.ofFloat(newsListView, "alpha", 0f, 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
-            ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 1f, 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
-            loadingAnimation.play(progressIndicatorFade).before(listFade);
-            loadingAnimation.start();
-
-            if (this.newsItemList != null)
+            try
             {
-                NewsAdapter newsAdapter = new NewsAdapter(getActivity(), this.newsItemList);
-                newsListView.setAdapter(newsAdapter);
+                swipeRefreshLayout.setRefreshing(false);
+
+                AnimatorSet loadingAnimation = new AnimatorSet();
+                ValueAnimator listFade = ObjectAnimator.ofFloat(newsListView, "alpha", 0f, 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 1f, 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                loadingAnimation.play(progressIndicatorFade).before(listFade);
+                loadingAnimation.start();
+
+                if (this.newsItemList != null)
+                {
+                    NewsAdapter newsAdapter = new NewsAdapter(getActivity(), this.newsItemList);
+                    newsListView.setAdapter(newsAdapter);
+                }
+            }
+            catch (Exception e)
+            {
+                Log.e("Error", "e", e);
             }
         }
     }
@@ -137,15 +144,6 @@ public class NewsFragment extends Fragment
         View rootView = inflater.inflate(R.layout.fragment_news, container, false);
 
         this.newsListView = (ListView) rootView.findViewById(R.id.newsListView);
-//        this.swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
-//        this.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
-//        {
-//            @Override
-//            public void onRefresh()
-//            {
-//                new GetNewsTask().execute();
-//            }
-//        });
 
         this.progressIndicator = (SpinKitView) rootView.findViewById(R.id.progressIndicator);
 

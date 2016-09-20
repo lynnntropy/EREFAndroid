@@ -35,24 +35,24 @@ public class ResultsFragment extends Fragment
         @Override
         protected Void doInBackground(Void... params)
         {
-            getActivity().runOnUiThread(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    AnimatorSet loadingAnimation = new AnimatorSet();
-                    ValueAnimator listFade = ObjectAnimator.ofFloat(listView, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
-                    ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
-                    loadingAnimation.play(listFade).before(progressIndicatorFade);
-                    loadingAnimation.start();
-                }
-            });
-
             try
             {
+                getActivity().runOnUiThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        AnimatorSet loadingAnimation = new AnimatorSet();
+                        ValueAnimator listFade = ObjectAnimator.ofFloat(listView, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                        ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                        loadingAnimation.play(listFade).before(progressIndicatorFade);
+                        loadingAnimation.start();
+                    }
+                });
+
                 this.results = Wrapper.getEboardResults();
             }
-            catch (IOException e)
+            catch (Exception e)
             {
                 Log.e("GetResults", "e", e);
             }
@@ -63,19 +63,26 @@ public class ResultsFragment extends Fragment
         @Override
         protected void onPostExecute(Void aVoid)
         {
-            AnimatorSet loadingAnimation = new AnimatorSet();
-            ValueAnimator listFade = ObjectAnimator.ofFloat(listView, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
-            ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
-            loadingAnimation.play(listFade).after(progressIndicatorFade);
-            loadingAnimation.start();
-
-            if (this.results != null)
+            try
             {
-                EboardResultsAdapter eboardResultsAdapter = new EboardResultsAdapter(getActivity(), this.results);
-                listView.setAdapter(eboardResultsAdapter);
-            }
+                AnimatorSet loadingAnimation = new AnimatorSet();
+                ValueAnimator listFade = ObjectAnimator.ofFloat(listView, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                loadingAnimation.play(listFade).after(progressIndicatorFade);
+                loadingAnimation.start();
 
-            swipeRefreshLayout.setRefreshing(false);
+                if (this.results != null)
+                {
+                    EboardResultsAdapter eboardResultsAdapter = new EboardResultsAdapter(getActivity(), this.results);
+                    listView.setAdapter(eboardResultsAdapter);
+                }
+
+                swipeRefreshLayout.setRefreshing(false);
+            }
+            catch (Exception e)
+            {
+                Log.e("Error", "e", e);
+            }
         }
     }
 

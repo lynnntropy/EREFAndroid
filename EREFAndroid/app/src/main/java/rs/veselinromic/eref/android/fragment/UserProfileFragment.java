@@ -36,25 +36,25 @@ public class UserProfileFragment extends Fragment
         @Override
         protected Void doInBackground(Void... params)
         {
-            getActivity().runOnUiThread(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    AnimatorSet loadingAnimation = new AnimatorSet();
-                    ValueAnimator listFade = ObjectAnimator.ofFloat(listView, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
-                    ValueAnimator tableFade = ObjectAnimator.ofFloat(tableLayout, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
-                    ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
-                    loadingAnimation.play(listFade).with(tableFade).before(progressIndicatorFade);
-                    loadingAnimation.start();
-                }
-            });
-
             try
             {
+                getActivity().runOnUiThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        AnimatorSet loadingAnimation = new AnimatorSet();
+                        ValueAnimator listFade = ObjectAnimator.ofFloat(listView, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                        ValueAnimator tableFade = ObjectAnimator.ofFloat(tableLayout, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                        ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                        loadingAnimation.play(listFade).with(tableFade).before(progressIndicatorFade);
+                        loadingAnimation.start();
+                    }
+                });
+
                 userProfile = Wrapper.getUserProfile();
             }
-            catch (IOException e)
+            catch (Exception e)
             {
                 Log.e("GetUserProfile", "e", e);
             }
@@ -65,20 +65,27 @@ public class UserProfileFragment extends Fragment
         @Override
         protected void onPostExecute(Void aVoid)
         {
-            AnimatorSet loadingAnimation = new AnimatorSet();
-            ValueAnimator listFade = ObjectAnimator.ofFloat(listView, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
-            ValueAnimator tableFade = ObjectAnimator.ofFloat(tableLayout, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
-            ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
-            loadingAnimation.play(listFade).with(tableFade).after(progressIndicatorFade);
-            loadingAnimation.start();
-
-            if (userProfile != null)
+            try
             {
-                generalCreditView.setText(userProfile.generalCredit);
-                tuitionCreditView.setText(userProfile.tuitionCredit);
+                AnimatorSet loadingAnimation = new AnimatorSet();
+                ValueAnimator listFade = ObjectAnimator.ofFloat(listView, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                ValueAnimator tableFade = ObjectAnimator.ofFloat(tableLayout, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                ValueAnimator progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                loadingAnimation.play(listFade).with(tableFade).after(progressIndicatorFade);
+                loadingAnimation.start();
 
-                UserProfileListAdapter userProfileListAdapter = new UserProfileListAdapter(getActivity(), userProfile.userData);
-                listView.setAdapter(userProfileListAdapter);
+                if (userProfile != null)
+                {
+                    generalCreditView.setText(userProfile.generalCredit);
+                    tuitionCreditView.setText(userProfile.tuitionCredit);
+
+                    UserProfileListAdapter userProfileListAdapter = new UserProfileListAdapter(getActivity(), userProfile.userData);
+                    listView.setAdapter(userProfileListAdapter);
+                }
+            }
+            catch (Exception e)
+            {
+                Log.e("Error", "e", e);
             }
         }
     }
