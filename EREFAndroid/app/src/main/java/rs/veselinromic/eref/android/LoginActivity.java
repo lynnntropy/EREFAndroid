@@ -1,5 +1,8 @@
 package rs.veselinromic.eref.android;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,8 +14,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
@@ -51,7 +56,7 @@ public class LoginActivity extends AppCompatActivity
         {
             if (loginSuccess)
             {
-                progressDialog.dismiss();
+//                progressDialog.dismiss();
 
                 Log.i("Login", "Login success!");
                 if (!storedLoginDetailsExist) persistLoginInfo(username, password);
@@ -67,7 +72,13 @@ public class LoginActivity extends AppCompatActivity
 
                 if (!storedLoginDetailsExist)
                 {
-                    progressDialog.dismiss();
+//                    progressDialog.dismiss();
+
+                    AnimatorSet loadingAnimation = new AnimatorSet();
+                    ValueAnimator formFade = ObjectAnimator.ofFloat(formLayout, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                    ValueAnimator loadingScreenFade = ObjectAnimator.ofFloat(loadingScreenLayout, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                    loadingAnimation.play(formFade).after(loadingScreenFade);
+                    loadingAnimation.start();
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                     builder.setMessage("Prijava neuspešna. Proverite korisničko ime i lozinku.");
@@ -102,7 +113,10 @@ public class LoginActivity extends AppCompatActivity
     EditText passwordEditText;
     Button loginButton;
 
-    ProgressDialog progressDialog;
+    RelativeLayout formLayout;
+    RelativeLayout loadingScreenLayout;
+
+//    ProgressDialog progressDialog;
     boolean storedLoginDetailsExist = false;
 
     @Override
@@ -111,6 +125,9 @@ public class LoginActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_login);
+
+        this.formLayout = (RelativeLayout) findViewById(R.id.form);
+        this.loadingScreenLayout = (RelativeLayout) findViewById(R.id.loadingScreen);
 
         usernameEditText = (EditText) findViewById(R.id.usernameEditText);
         passwordEditText = (EditText) findViewById(R.id.passwordEditText);
@@ -137,8 +154,12 @@ public class LoginActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(usernameEditText.getWindowToken(), 0);
+
                 String username = usernameEditText.getText().toString().trim();
                 String password = passwordEditText.getText().toString();
+
                 login(username, password);
             }
         });
@@ -148,11 +169,17 @@ public class LoginActivity extends AppCompatActivity
     {
         new LoginTask(username, password).execute();
 
-        this.progressDialog = new ProgressDialog(this);
-        this.progressDialog.setTitle("Prijava");
-        this.progressDialog.setMessage("Prijava u toku...");
-        this.progressDialog.setCancelable(false);
-        this.progressDialog.show();
+//        this.progressDialog = new ProgressDialog(this);
+//        this.progressDialog.setTitle("Prijava");
+//        this.progressDialog.setMessage("Prijava u toku...");
+//        this.progressDialog.setCancelable(false);
+//        this.progressDialog.show();
+
+        AnimatorSet loadingAnimation = new AnimatorSet();
+        ValueAnimator formFade = ObjectAnimator.ofFloat(formLayout, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+        ValueAnimator loadingScreenFade = ObjectAnimator.ofFloat(loadingScreenLayout, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+        loadingAnimation.play(formFade).before(loadingScreenFade);
+        loadingAnimation.start();
     }
 
     void persistLoginInfo(String username, String password)

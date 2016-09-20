@@ -7,48 +7,83 @@
     tools:context="rs.veselinromic.eref.android.LoginActivity"
     android:padding="60dp">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/usernameEditText"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:hint="Korisničko ime (broj indeksa)"
-        android:layout_marginTop="50dp"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/passwordEditText"
-        android:layout_below="@+id/usernameEditText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/usernameEditText"
-        android:layout_alignEnd="@+id/usernameEditText"
-        android:hint="Lozinka"/>
 
-    <Button
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/form">
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/usernameEditText"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:hint="Korisničko ime (broj indeksa)"
+            android:layout_marginTop="50dp"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/passwordEditText"
+            android:layout_below="@+id/usernameEditText"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/usernameEditText"
+            android:layout_alignEnd="@+id/usernameEditText"
+            android:hint="Lozinka"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Prijava"
+            android:id="@+id/loginButton"
+            android:layout_below="@+id/passwordEditText"
+            android:layout_centerHorizontal="true"
+            android:width="150dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Aplikacija pamti vaše podatke, tako da ih morate uneti samo jednom."
+            android:id="@+id/textView"
+            android:layout_below="@+id/loginButton"
+            android:layout_centerHorizontal="true"
+            android:textSize="15sp"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"/>
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Prijava"
-        android:id="@+id/loginButton"
-        android:layout_below="@+id/passwordEditText"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:width="150dp"/>
+        android:id="@+id/loadingScreen"
+        android:alpha="0">
+        <com.github.ybq.android.spinkit.SpinKitView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/progressIndicator"
+            style="@style/SpinKitView.Wave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:SpinKit_Color="@color/colorPrimaryDark"
+            android:layout_centerHorizontal="true"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Aplikacija pamti vaše podatke, tako da ih morate uneti samo jednom."
-        android:id="@+id/textView"
-        android:layout_below="@+id/loginButton"
-        android:layout_centerHorizontal="true"
-        android:textSize="15sp"
-        android:layout_marginTop="20dp"
-        android:gravity="center_horizontal"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Prijava\nu toku..."
+            android:id="@+id/textView5"
+            android:layout_below="@+id/progressIndicator"
+            android:layout_centerHorizontal="true"
+            android:textSize="17dp"
+            android:layout_marginTop="15dp"/>
+    </RelativeLayout>
 </RelativeLayout>
