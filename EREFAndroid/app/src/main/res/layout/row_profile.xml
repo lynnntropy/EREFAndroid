@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -24,13 +26,11 @@
         android:layout_height="wrap_content"
         android:text="asdasdasdasdasdasdasdasdasdasdasdasdasdahfuiewhfuiwehgirwg"
         android:id="@+id/valueTextView"
-        android:layout_toRightOf="@+id/keyTextView"
-        android:layout_alignBottom="@+id/keyTextView"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:singleLine="true"
         android:textSize="17sp"
         android:textAlignment="textStart"
         android:gravity="start"
-        android:layout_marginLeft="5dp"/>
+        android:layout_below="@+id/keyTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
 </RelativeLayout>
