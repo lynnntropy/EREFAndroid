@@ -1,11 +1,13 @@
 package rs.veselinromic.eref.wrapper;
 
 import ch.boye.httpclientandroidlib.HttpResponse;
+import ch.boye.httpclientandroidlib.client.CookieStore;
 import ch.boye.httpclientandroidlib.client.HttpClient;
 import ch.boye.httpclientandroidlib.client.methods.HttpGet;
 import ch.boye.httpclientandroidlib.conn.ssl.SSLConnectionSocketFactory;
 import ch.boye.httpclientandroidlib.conn.ssl.SSLContextBuilder;
 import ch.boye.httpclientandroidlib.conn.ssl.TrustStrategy;
+import ch.boye.httpclientandroidlib.impl.client.BasicCookieStore;
 import ch.boye.httpclientandroidlib.impl.client.HttpClients;
 import ch.boye.httpclientandroidlib.util.EntityUtils;
 import org.jsoup.Jsoup;

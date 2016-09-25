@@ -1,8 +1,11 @@
 package rs.veselinromic.eref.android;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,6 +31,7 @@ import rs.veselinromic.eref.android.fragment.NewsFragment;
 import rs.veselinromic.eref.android.fragment.ResultsFragment;
 import rs.veselinromic.eref.android.fragment.SubjectsFragment;
 import rs.veselinromic.eref.android.fragment.UserProfileFragment;
+import rs.veselinromic.eref.wrapper.SessionManager;
 import rs.veselinromic.eref.wrapper.Wrapper;
 import rs.veselinromic.eref.wrapper.model.UserProfile;
 
@@ -79,6 +83,38 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    class CheckCookieTask extends AsyncTask<Void, Void, Void>
+    {
+        boolean validCookie = false;
+
+        @Override
+        protected Void doInBackground(Void... params)
+        {
+            try
+            {
+                validCookie = SessionManager.isAuthenticated();
+            }
+            catch (IOException e)
+            {
+                Log.e("e", "e", e);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid)
+        {
+            if (!validCookie)
+            {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }
+        }
+    }
+
     RelativeLayout fragmentContainerLayout;
 
     @Override
@@ -106,6 +142,24 @@ public class MainActivity extends AppCompatActivity
         transaction.commit();
 
         setTitle("VTŠ Vesti");
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        if (connectedToNetwork()) new CheckCookieTask().execute();
+    }
+
+    private boolean connectedToNetwork()
+    {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        return  activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
     }
 
     @Override
