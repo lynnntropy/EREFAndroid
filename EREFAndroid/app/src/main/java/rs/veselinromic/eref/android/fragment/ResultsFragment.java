@@ -26,8 +26,14 @@ import rs.veselinromic.eref.android.adapter.EboardResultsAdapter;
 import rs.veselinromic.eref.wrapper.Wrapper;
 import rs.veselinromic.eref.wrapper.model.EboardResultsItem;
 
-public class ResultsFragment extends Fragment
+public class ResultsFragment extends Fragment implements RefreshableFragment
 {
+    @Override
+    public void refresh()
+    {
+        new GetResultsTask().execute();
+    }
+
     class GetResultsTask extends AsyncTask<Void, Void, Void>
     {
         List<EboardResultsItem> results;

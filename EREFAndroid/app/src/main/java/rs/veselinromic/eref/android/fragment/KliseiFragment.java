@@ -29,8 +29,14 @@ import rs.veselinromic.eref.android.adapter.EboardExamplesAdapter;
 import rs.veselinromic.eref.wrapper.Wrapper;
 import rs.veselinromic.eref.wrapper.model.EboardExampleItem;
 
-public class KliseiFragment extends Fragment
+public class KliseiFragment extends Fragment implements RefreshableFragment
 {
+    @Override
+    public void refresh()
+    {
+        new GetExamplesTask().execute();
+    }
+
     class GetExamplesTask extends AsyncTask<Void, Void, Void>
     {
         List<EboardExampleItem> exampleItemList;

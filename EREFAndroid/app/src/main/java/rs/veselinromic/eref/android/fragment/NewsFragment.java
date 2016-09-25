@@ -34,8 +34,14 @@ import rs.veselinromic.eref.wrapper.model.NewsItem;
  * Use the {@link NewsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewsFragment extends Fragment
+public class NewsFragment extends Fragment implements RefreshableFragment
 {
+    @Override
+    public void refresh()
+    {
+        new GetNewsTask().execute();
+    }
+
     class GetNewsTask extends AsyncTask<Void, Void, Void>
     {
         List<NewsItem> newsItemList;

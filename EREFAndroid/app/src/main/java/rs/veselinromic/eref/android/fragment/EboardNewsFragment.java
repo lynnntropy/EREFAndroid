@@ -25,8 +25,14 @@ import rs.veselinromic.eref.android.adapter.EboardNewsAdapter;
 import rs.veselinromic.eref.wrapper.Wrapper;
 import rs.veselinromic.eref.wrapper.model.EboardNewsItem;
 
-public class EboardNewsFragment extends Fragment
+public class EboardNewsFragment extends Fragment implements RefreshableFragment
 {
+    @Override
+    public void refresh()
+    {
+        new GetEboardNewsTask().execute();
+    }
+
     class GetEboardNewsTask extends AsyncTask<Void, Void, Void>
     {
         List<EboardNewsItem> eboardNewsItems;

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.github.ybq.android.spinkit.SpinKitView;
 
 import java.io.IOException;
+import java.sql.Ref;
 import java.util.List;
 
 import rs.veselinromic.eref.android.MainActivity;
@@ -29,8 +30,14 @@ import rs.veselinromic.eref.wrapper.Wrapper;
 import rs.veselinromic.eref.wrapper.model.Subject;
 import rs.veselinromic.eref.wrapper.model.UserProfile;
 
-public class SubjectsFragment extends Fragment
+public class SubjectsFragment extends Fragment implements RefreshableFragment
 {
+    @Override
+    public void refresh()
+    {
+        new GetSubjectsTask().execute();
+    }
+
     class GetSubjectsTask extends AsyncTask<Void, Void, Void>
     {
         List<Subject> subjectList;

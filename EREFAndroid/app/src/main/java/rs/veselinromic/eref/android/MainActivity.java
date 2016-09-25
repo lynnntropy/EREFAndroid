@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,6 +30,7 @@ import rs.veselinromic.eref.android.fragment.AboutFragment;
 import rs.veselinromic.eref.android.fragment.EboardNewsFragment;
 import rs.veselinromic.eref.android.fragment.KliseiFragment;
 import rs.veselinromic.eref.android.fragment.NewsFragment;
+import rs.veselinromic.eref.android.fragment.RefreshableFragment;
 import rs.veselinromic.eref.android.fragment.ResultsFragment;
 import rs.veselinromic.eref.android.fragment.SubjectsFragment;
 import rs.veselinromic.eref.android.fragment.UserProfileFragment;
@@ -42,9 +45,9 @@ public class MainActivity extends AppCompatActivity
         ResultsFragment.OnFragmentInteractionListener
 
 {
+
     public final static int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 100;
-
-
+    Fragment currentFragment;
 
     @Override
     public void onFragmentInteraction(Uri uri)
@@ -136,9 +139,10 @@ public class MainActivity extends AppCompatActivity
 
         new GetUserProfileTask().execute();
 
+        currentFragment = new NewsFragment();
         this.fragmentContainerLayout = (RelativeLayout) findViewById(R.id.fragmentContainer);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainer, new NewsFragment());
+        transaction.replace(R.id.fragmentContainer, currentFragment);
         transaction.commit();
 
         setTitle("VTŠ Vesti");
@@ -186,32 +190,39 @@ public class MainActivity extends AppCompatActivity
         switch(id)
         {
             case R.id.nav_vtsvesti:
-                transaction.replace(R.id.fragmentContainer, new NewsFragment()).commit();
+                currentFragment = new NewsFragment();
+//                transaction.replace(R.id.fragmentContainer, currentFragment).commit();
                 setTitle("VTŠ Vesti");
                 break;
             case R.id.nav_profil:
-                transaction.replace(R.id.fragmentContainer, new UserProfileFragment()).commit();
+                currentFragment = new UserProfileFragment();
+//                transaction.replace(R.id.fragmentContainer, new UserProfileFragment()).commit();
                 setTitle("Profil");
                 break;
             case R.id.nav_predmeti:
-                transaction.replace(R.id.fragmentContainer, new SubjectsFragment()).commit();
+                currentFragment = new SubjectsFragment();
+//                transaction.replace(R.id.fragmentContainer, new SubjectsFragment()).commit();
                 setTitle("Predmeti");
                 break;
             case R.id.nav_etablavesti:
-                transaction.replace(R.id.fragmentContainer, new EboardNewsFragment()).commit();
+                currentFragment = new EboardNewsFragment();
+//                transaction.replace(R.id.fragmentContainer, new EboardNewsFragment()).commit();
                 setTitle("E-tabla - Vesti");
                 break;
             case R.id.nav_klisei:
-                transaction.replace(R.id.fragmentContainer, new KliseiFragment()).commit();
+                currentFragment = new KliseiFragment();
+//                transaction.replace(R.id.fragmentContainer, new KliseiFragment()).commit();
                 setTitle("E-tabla - Klišei");
                 break;
             case R.id.nav_rezultati:
-                transaction.replace(R.id.fragmentContainer, new ResultsFragment()).commit();
+                currentFragment = new ResultsFragment();
+//                transaction.replace(R.id.fragmentContainer, new ResultsFragment()).commit();
                 setTitle("E-tabla - Rezultati");
                 break;
 
             case R.id.nav_about:
-                transaction.replace(R.id.fragmentContainer, new AboutFragment()).commit();
+                currentFragment = new AboutFragment();
+//                transaction.replace(R.id.fragmentContainer, new AboutFragment()).commit();
                 setTitle("O aplikaciji");
                 break;
 
@@ -229,6 +240,8 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
 
+        transaction.replace(R.id.fragmentContainer, currentFragment).commit();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -237,24 +250,44 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
     {
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
-                // If request is cancelled, the result arrays are empty.
+        switch (requestCode)
+        {
+            case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:
+            {
                 if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    // permission was granted
+                }
+                else
+                {
+                    // permission denied
                 }
 
                 return;
             }
         }
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        int id = item.getItemId();
+
+        switch(id)
+        {
+            case R.id.action_refresh:
+                if (currentFragment instanceof RefreshableFragment) ((RefreshableFragment) currentFragment).refresh();
+                break;
+        }
+
+        return true;
     }
 }

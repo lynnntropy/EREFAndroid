@@ -21,14 +21,21 @@ import android.widget.TextView;
 import com.github.ybq.android.spinkit.SpinKitView;
 
 import java.io.IOException;
+import java.sql.Ref;
 
 import rs.veselinromic.eref.android.R;
 import rs.veselinromic.eref.android.adapter.UserProfileListAdapter;
 import rs.veselinromic.eref.wrapper.Wrapper;
 import rs.veselinromic.eref.wrapper.model.UserProfile;
 
-public class UserProfileFragment extends Fragment
+public class UserProfileFragment extends Fragment implements RefreshableFragment
 {
+    @Override
+    public void refresh()
+    {
+        new GetUserProfileTask().execute();
+    }
+
     class GetUserProfileTask extends AsyncTask<Void, Void, Void>
     {
         UserProfile userProfile;
