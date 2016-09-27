@@ -28,10 +28,12 @@ import rs.veselinromic.eref.wrapper.model.EboardResultsItem;
 
 public class ResultsFragment extends Fragment implements RefreshableFragment
 {
+    boolean isRefreshing = false;
+
     @Override
     public void refresh()
     {
-        new GetResultsTask().execute();
+        if (!isRefreshing) new GetResultsTask().execute();
     }
 
     class GetResultsTask extends AsyncTask<Void, Void, Void>
@@ -42,6 +44,8 @@ public class ResultsFragment extends Fragment implements RefreshableFragment
         @Override
         protected Void doInBackground(Void... params)
         {
+            isRefreshing = true;
+
             try
             {
                 getActivity().runOnUiThread(new Runnable()
@@ -70,6 +74,8 @@ public class ResultsFragment extends Fragment implements RefreshableFragment
         @Override
         protected void onPostExecute(Void aVoid)
         {
+            isRefreshing = false;
+
             try
             {
                 if (loadingAnimation.isRunning()) loadingAnimation.cancel();

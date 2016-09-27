@@ -30,10 +30,12 @@ import rs.veselinromic.eref.wrapper.model.UserProfile;
 
 public class UserProfileFragment extends Fragment implements RefreshableFragment
 {
+    boolean isRefreshing = false;
+
     @Override
     public void refresh()
     {
-        new GetUserProfileTask().execute();
+        if (!isRefreshing) new GetUserProfileTask().execute();
     }
 
     class GetUserProfileTask extends AsyncTask<Void, Void, Void>
@@ -44,6 +46,8 @@ public class UserProfileFragment extends Fragment implements RefreshableFragment
         @Override
         protected Void doInBackground(Void... params)
         {
+            isRefreshing = true;
+
             try
             {
                 getActivity().runOnUiThread(new Runnable()
@@ -73,6 +77,8 @@ public class UserProfileFragment extends Fragment implements RefreshableFragment
         @Override
         protected void onPostExecute(Void aVoid)
         {
+            isRefreshing = false;
+
             try
             {
                 if (loadingAnimation.isRunning()) loadingAnimation.cancel();

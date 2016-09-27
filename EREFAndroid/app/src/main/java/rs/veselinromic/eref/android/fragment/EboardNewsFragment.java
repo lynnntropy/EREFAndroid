@@ -27,10 +27,12 @@ import rs.veselinromic.eref.wrapper.model.EboardNewsItem;
 
 public class EboardNewsFragment extends Fragment implements RefreshableFragment
 {
+    boolean isRefreshing = false;
+
     @Override
     public void refresh()
     {
-        new GetEboardNewsTask().execute();
+        if (!isRefreshing) new GetEboardNewsTask().execute();
     }
 
     class GetEboardNewsTask extends AsyncTask<Void, Void, Void>
@@ -41,6 +43,8 @@ public class EboardNewsFragment extends Fragment implements RefreshableFragment
         @Override
         protected Void doInBackground(Void... params)
         {
+            isRefreshing = true;
+
             try
             {
                 getActivity().runOnUiThread(new Runnable()
@@ -69,6 +73,8 @@ public class EboardNewsFragment extends Fragment implements RefreshableFragment
         @Override
         protected void onPostExecute(Void aVoid)
         {
+            isRefreshing = false;
+
             try
             {
                 if (loadingAnimation.isRunning()) loadingAnimation.cancel();

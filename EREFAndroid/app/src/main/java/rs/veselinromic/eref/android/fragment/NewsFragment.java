@@ -36,10 +36,12 @@ import rs.veselinromic.eref.wrapper.model.NewsItem;
  */
 public class NewsFragment extends Fragment implements RefreshableFragment
 {
+    boolean isRefreshing = false;
+
     @Override
     public void refresh()
     {
-        new GetNewsTask().execute();
+        if (!isRefreshing) new GetNewsTask().execute();
     }
 
     class GetNewsTask extends AsyncTask<Void, Void, Void>
@@ -50,6 +52,8 @@ public class NewsFragment extends Fragment implements RefreshableFragment
         @Override
         protected Void doInBackground(Void... params)
         {
+            isRefreshing = true;
+
             try
             {
                 getActivity().runOnUiThread(new Runnable()
@@ -78,6 +82,8 @@ public class NewsFragment extends Fragment implements RefreshableFragment
         @Override
         protected void onPostExecute(Void aVoid)
         {
+            isRefreshing = false;
+
             try
             {
                 swipeRefreshLayout.setRefreshing(false);
@@ -161,7 +167,7 @@ public class NewsFragment extends Fragment implements RefreshableFragment
             @Override
             public void onRefresh()
             {
-                new GetNewsTask().execute();
+                if (!isRefreshing) new GetNewsTask().execute();
             }
         });
 

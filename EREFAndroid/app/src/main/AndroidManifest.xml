@@ -25,6 +25,8 @@
             android:label="EREF Android"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <service
+            android:name=".BackgroundService" />
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="2f61b9888019fbcbea0b10ec57d35e3bcd2cce58" />

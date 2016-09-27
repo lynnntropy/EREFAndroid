@@ -32,10 +32,12 @@ import rs.veselinromic.eref.wrapper.model.UserProfile;
 
 public class SubjectsFragment extends Fragment implements RefreshableFragment
 {
+    boolean isRefreshing = false;
+
     @Override
     public void refresh()
     {
-        new GetSubjectsTask().execute();
+        if (!isRefreshing) new GetSubjectsTask().execute();
     }
 
     class GetSubjectsTask extends AsyncTask<Void, Void, Void>
@@ -46,6 +48,8 @@ public class SubjectsFragment extends Fragment implements RefreshableFragment
         @Override
         protected Void doInBackground(Void... params)
         {
+            isRefreshing = true;
+
             try
             {
                 getActivity().runOnUiThread(new Runnable()
@@ -74,6 +78,8 @@ public class SubjectsFragment extends Fragment implements RefreshableFragment
         @Override
         protected void onPostExecute(Void aVoid)
         {
+            isRefreshing = false;
+
             try
             {
                 swipeRefreshLayout.setRefreshing(false);

@@ -146,6 +146,8 @@ public class MainActivity extends AppCompatActivity
         transaction.commit();
 
         setTitle("VTŠ Vesti");
+
+        if (!BackgroundService.isRunning) startService(new Intent(this, BackgroundService.class));
     }
 
     @Override

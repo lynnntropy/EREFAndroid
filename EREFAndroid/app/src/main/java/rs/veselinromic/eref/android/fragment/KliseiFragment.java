@@ -31,10 +31,12 @@ import rs.veselinromic.eref.wrapper.model.EboardExampleItem;
 
 public class KliseiFragment extends Fragment implements RefreshableFragment
 {
+    boolean isRefreshing = false;
+
     @Override
     public void refresh()
     {
-        new GetExamplesTask().execute();
+        if (!isRefreshing) new GetExamplesTask().execute();
     }
 
     class GetExamplesTask extends AsyncTask<Void, Void, Void>
@@ -45,6 +47,8 @@ public class KliseiFragment extends Fragment implements RefreshableFragment
         @Override
         protected Void doInBackground(Void... params)
         {
+            isRefreshing = true;
+
             try
             {
                 getActivity().runOnUiThread(new Runnable()
@@ -73,6 +77,8 @@ public class KliseiFragment extends Fragment implements RefreshableFragment
         @Override
         protected void onPostExecute(Void aVoid)
         {
+            isRefreshing = false;
+
             try
             {
                 if (loadingAnimation.isRunning()) loadingAnimation.cancel();
