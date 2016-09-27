@@ -47,7 +47,7 @@ public class Wrapper
         return newsItems;
     }
 
-    public static UserProfile getUserProfile() throws IOException
+    public static UserProfile getUserProfile() throws IOException, NullPointerException
     {
         Document document = Network.getDocument(PROFILE_URL);
 

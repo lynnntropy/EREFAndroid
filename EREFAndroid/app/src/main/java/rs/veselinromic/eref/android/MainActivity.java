@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity
             {
                 this.userProfile = Wrapper.getUserProfile();
             }
-            catch (IOException e)
+            catch (Exception e)
             {
                 Log.e("GetUserProfileTask", "e", e);
             }
