@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity
 
         setTitle("VTŠ Vesti");
 
-        if (!BackgroundService.isRunning) startService(new Intent(this, BackgroundService.class));
+        // if (!BackgroundService.isRunning) startService(new Intent(this, BackgroundService.class));
     }
 
     @Override
