@@ -61,5 +61,6 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.3@aar') {
         transitive = true;
     }
+
     compile 'com.github.ybq:Android-SpinKit:1.1.0'
 }
