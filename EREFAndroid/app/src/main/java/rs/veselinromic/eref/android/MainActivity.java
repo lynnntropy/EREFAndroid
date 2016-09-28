@@ -175,7 +175,8 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START))
         {
             drawer.closeDrawer(GravityCompat.START);
-        } else
+        }
+        else
         {
             super.onBackPressed();
         }
@@ -184,8 +185,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item)
     {
-        // setTitle(item.getTitle());
-
         int id = item.getItemId();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -193,38 +192,31 @@ public class MainActivity extends AppCompatActivity
         {
             case R.id.nav_vtsvesti:
                 currentFragment = new NewsFragment();
-//                transaction.replace(R.id.fragmentContainer, currentFragment).commit();
                 setTitle("VTŠ Vesti");
                 break;
             case R.id.nav_profil:
                 currentFragment = new UserProfileFragment();
-//                transaction.replace(R.id.fragmentContainer, new UserProfileFragment()).commit();
                 setTitle("Profil");
                 break;
             case R.id.nav_predmeti:
                 currentFragment = new SubjectsFragment();
-//                transaction.replace(R.id.fragmentContainer, new SubjectsFragment()).commit();
                 setTitle("Predmeti");
                 break;
             case R.id.nav_etablavesti:
                 currentFragment = new EboardNewsFragment();
-//                transaction.replace(R.id.fragmentContainer, new EboardNewsFragment()).commit();
                 setTitle("E-tabla - Vesti");
                 break;
             case R.id.nav_klisei:
                 currentFragment = new KliseiFragment();
-//                transaction.replace(R.id.fragmentContainer, new KliseiFragment()).commit();
                 setTitle("E-tabla - Klišei");
                 break;
             case R.id.nav_rezultati:
                 currentFragment = new ResultsFragment();
-//                transaction.replace(R.id.fragmentContainer, new ResultsFragment()).commit();
                 setTitle("E-tabla - Rezultati");
                 break;
 
             case R.id.nav_about:
                 currentFragment = new AboutFragment();
-//                transaction.replace(R.id.fragmentContainer, new AboutFragment()).commit();
                 setTitle("O aplikaciji");
                 break;
 

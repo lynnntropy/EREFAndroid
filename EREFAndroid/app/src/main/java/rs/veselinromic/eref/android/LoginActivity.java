@@ -59,8 +59,6 @@ public class LoginActivity extends AppCompatActivity
         {
             if (loginSuccess)
             {
-//                progressDialog.dismiss();
-
                 Log.i("Login", "Login success!");
                 if (!storedLoginDetailsExist) persistLoginInfo(username, password);
 
@@ -75,8 +73,6 @@ public class LoginActivity extends AppCompatActivity
 
                 if (!storedLoginDetailsExist)
                 {
-//                    progressDialog.dismiss();
-
                     try
                     {
                         AnimatorSet loadingAnimation = new AnimatorSet();
@@ -126,7 +122,6 @@ public class LoginActivity extends AppCompatActivity
     RelativeLayout formLayout;
     RelativeLayout loadingScreenLayout;
 
-//    ProgressDialog progressDialog;
     boolean storedLoginDetailsExist = false;
 
     @Override
@@ -200,12 +195,6 @@ public class LoginActivity extends AppCompatActivity
     void login(String username, String password)
     {
         new LoginTask(username, password).execute();
-
-//        this.progressDialog = new ProgressDialog(this);
-//        this.progressDialog.setTitle("Prijava");
-//        this.progressDialog.setMessage("Prijava u toku...");
-//        this.progressDialog.setCancelable(false);
-//        this.progressDialog.show();
 
         AnimatorSet loadingAnimation = new AnimatorSet();
         ValueAnimator formFade = ObjectAnimator.ofFloat(formLayout, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
