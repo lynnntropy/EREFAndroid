@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -76,25 +77,32 @@ public class LoginActivity extends AppCompatActivity
                 {
 //                    progressDialog.dismiss();
 
-                    AnimatorSet loadingAnimation = new AnimatorSet();
-                    ValueAnimator formFade = ObjectAnimator.ofFloat(formLayout, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
-                    ValueAnimator loadingScreenFade = ObjectAnimator.ofFloat(loadingScreenLayout, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
-                    loadingAnimation.play(formFade).after(loadingScreenFade);
-                    loadingAnimation.start();
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                    builder.setMessage("Prijava neuspešna. Proverite korisničko ime i lozinku.");
-                    builder.setTitle("Greška");
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    try
                     {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            // dialog.dismiss();
-                        }
-                    });
+                        AnimatorSet loadingAnimation = new AnimatorSet();
+                        ValueAnimator formFade = ObjectAnimator.ofFloat(formLayout, "alpha", 1f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                        ValueAnimator loadingScreenFade = ObjectAnimator.ofFloat(loadingScreenLayout, "alpha", 0f).setDuration(getResources().getInteger(R.integer.loading_fade_duration));
+                        loadingAnimation.play(formFade).after(loadingScreenFade);
+                        loadingAnimation.start();
 
-                    builder.create().show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                        builder.setMessage("Prijava neuspešna. Proverite korisničko ime i lozinku.");
+                        builder.setTitle("Greška");
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                // do nothing
+                            }
+                        });
+
+                        builder.create().show();
+                    }
+                    catch (WindowManager.BadTokenException e)
+                    {
+                        Log.e("Login", "e", e);
+                    }
                 }
                 else
                 {
