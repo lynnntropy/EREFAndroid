@@ -5,15 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="rs.veselinromic.eref.android.LoginActivity"
-    android:padding="60dp">
+    >
 
 
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:id="@+id/form"
         android:layout_centerVertical="true"
-        android:id="@+id/form">
+        android:layout_centerHorizontal="true">
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,7 +25,11 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:hint="Korisničko ime (broj indeksa)"
-            android:layout_marginTop="50dp"/>
+            android:imeOptions="actionNext"
+            android:maxLines="1"
+            android:nextFocusDown="@+id/passwordEditText"
+            android:singleLine="true"
+            />
 
         <EditText
             android:layout_width="wrap_content"
@@ -37,7 +42,10 @@
             android:layout_alignParentStart="true"
             android:layout_alignRight="@+id/usernameEditText"
             android:layout_alignEnd="@+id/usernameEditText"
-            android:hint="Lozinka"/>
+            android:hint="Lozinka"
+            android:imeOptions="actionDone"
+            android:maxLines="1"
+            android:singleLine="true"/>
 
         <Button
             android:layout_width="wrap_content"
