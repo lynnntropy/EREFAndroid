@@ -38,7 +38,7 @@ public class AboutFragment extends Fragment
             String versionName = pInfo.versionName;
 
             this.version = (TextView) rootView.findViewById(R.id.version);
-            this.version.setText("Verzija: " + versionName);
+            this.version.setText("Verzija " + versionName);
         }
         catch (PackageManager.NameNotFoundException e)
         {
