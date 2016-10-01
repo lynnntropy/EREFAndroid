@@ -4,7 +4,8 @@ package rs.veselinromic.eref.wrapper.model;
 
 public class ScheduleItem
 {
-    String[] dayNames = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+    public static String[] dayNames = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+    public static String[] dayNamesLocal = {"Ponedeljak", "Utorak", "Sreda", "Četvrtak", "Petak"};
 
     public int dayOfWeek;
     public String startTime;

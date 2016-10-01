@@ -15,10 +15,10 @@
             android:id="@+id/nav_predmeti"
             android:icon="@drawable/ic_format_list_bulleted_black_24dp"
             android:title="Predmeti"/>
-        <!--<item-->
-            <!--android:id="@+id/nav_raspored"-->
-            <!--android:icon="@drawable/ic_event_black_24dp"-->
-            <!--android:title="Raspored"/>-->
+        <item
+            android:id="@+id/nav_schedule"
+            android:icon="@drawable/ic_event_black_24dp"
+            android:title="Raspored"/>
 
         <item android:title="E-Tabla">
             <menu>

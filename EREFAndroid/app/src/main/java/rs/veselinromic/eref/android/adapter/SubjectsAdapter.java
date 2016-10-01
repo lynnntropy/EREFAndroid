@@ -8,11 +8,11 @@ import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import rs.veselinromic.eref.android.R;
+import rs.veselinromic.eref.android.Util;
 import rs.veselinromic.eref.wrapper.model.Subject;
 
 public class SubjectsAdapter extends ArrayAdapter<Subject>
@@ -76,7 +76,7 @@ public class SubjectsAdapter extends ArrayAdapter<Subject>
 
         if (objects.get(position).semesterNumber == 0)
         {
-            View rowView = layoutInflater.inflate(R.layout.row_subject_header, parent, false);
+            View rowView = layoutInflater.inflate(R.layout.row_list_header, parent, false);
 
 
 
@@ -97,7 +97,7 @@ public class SubjectsAdapter extends ArrayAdapter<Subject>
             TextView points = (TextView) rowView.findViewById(R.id.points);
             TextView grade = (TextView) rowView.findViewById(R.id.grade);
 
-            subjectName.setText(toTitleCase(currentSubject.title));
+            subjectName.setText(Util.toTitleCase(currentSubject.title));
             points.setText(currentSubject.pointCount);
 
             if (currentSubject.grade.contains("Nije"))
@@ -124,23 +124,6 @@ public class SubjectsAdapter extends ArrayAdapter<Subject>
         }
     }
 
-    static String toTitleCase(String input) {
-        input = input.toLowerCase();
-        StringBuilder titleCase = new StringBuilder();
-        boolean nextTitleCase = true;
 
-        for (char c : input.toCharArray()) {
-            if (Character.isSpaceChar(c)) {
-                nextTitleCase = true;
-            } else if (nextTitleCase) {
-                c = Character.toTitleCase(c);
-                nextTitleCase = false;
-            }
-
-            titleCase.append(c);
-        }
-
-        return titleCase.toString().replace(" I ", " i ");
-    }
 
 }

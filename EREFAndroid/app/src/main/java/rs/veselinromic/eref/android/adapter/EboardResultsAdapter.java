@@ -120,24 +120,16 @@ public class EboardResultsAdapter extends ArrayAdapter<EboardResultsItem>
 
         final String filePath = myDirectory.getAbsolutePath() + "/" + currentItem.dateTime;
 
-//        TextView submitter = (TextView) rowView.findViewById(R.id.submitter);
-//        TextView dateTime = (TextView) rowView.findViewById(R.id.dateTime);
-//        TextView subject = (TextView) rowView.findViewById(R.id.subject);
         TextView metadataTextView = (TextView) rowView.findViewById(R.id.metadataTextView);
         TextView titleTextView = (TextView) rowView.findViewById(R.id.titleTextView);
         HtmlTextView body = (HtmlTextView) rowView.findViewById(R.id.body);
-        // TextView filename = (TextView) rowView.findViewById(R.id.filename);
         final Button downloadButton = (Button) rowView.findViewById(R.id.download);
 
-//        submitter.setText("Postavio: " + currentItem.submitter);
-//        dateTime.setText(currentItem.dateTime);
-//        subject.setText("Predmet: " + currentItem.subject);
         metadataTextView.setText(String.format("Postavio/la: %s\nPredmet: %s\nDatum i vreme: %s",
                 currentItem.submitter, currentItem.subject, currentItem.dateTime));
 
         titleTextView.setText(currentItem.title);
         body.setHtmlFromString(currentItem.body, true);
-        //currentItem.
 
         File file = new File(filePath);
         if (!file.exists())

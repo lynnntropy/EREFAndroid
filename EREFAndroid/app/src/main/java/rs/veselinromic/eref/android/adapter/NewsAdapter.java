@@ -41,7 +41,6 @@ public class NewsAdapter extends ArrayAdapter<NewsItem>
 
         titleTextView.setText(currentNewsItem.title);
         dateTextView.setText(currentNewsItem.date);
-//        bodyHtmlTextView.setHtmlFromString(currentNewsItem.contentHtml, new HtmlTextView.RemoteImageGetter());
         bodyHtmlTextView.setHtmlFromString(currentNewsItem.contentHtml, true);
 
         return rowView;
