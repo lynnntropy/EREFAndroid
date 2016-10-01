@@ -32,6 +32,7 @@ import rs.veselinromic.eref.android.fragment.KliseiFragment;
 import rs.veselinromic.eref.android.fragment.NewsFragment;
 import rs.veselinromic.eref.android.fragment.RefreshableFragment;
 import rs.veselinromic.eref.android.fragment.ResultsFragment;
+import rs.veselinromic.eref.android.fragment.ScheduleFragment;
 import rs.veselinromic.eref.android.fragment.SubjectsFragment;
 import rs.veselinromic.eref.android.fragment.UserProfileFragment;
 import rs.veselinromic.eref.wrapper.SessionManager;
@@ -202,6 +203,12 @@ public class MainActivity extends AppCompatActivity
                 currentFragment = new SubjectsFragment();
                 setTitle("Predmeti");
                 break;
+            case R.id.nav_schedule:
+                currentFragment = new ScheduleFragment();
+                setTitle("Raspored");
+                break;
+
+
             case R.id.nav_etablavesti:
                 currentFragment = new EboardNewsFragment();
                 setTitle("E-tabla - Vesti");
