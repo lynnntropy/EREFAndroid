@@ -81,10 +81,17 @@ public class MainActivity extends AppCompatActivity
         {
             if (userProfile != null)
             {
-                ((TextView) findViewById(R.id.name)).setText(
-                        String.format("%s %s", userProfile.userData.get(1).value, userProfile.userData.get(3).value));
+                try
+                {
+                    ((TextView) findViewById(R.id.name)).setText(
+                            String.format("%s %s", userProfile.userData.get(1).value, userProfile.userData.get(3).value));
 
-                ((TextView) findViewById(R.id.nameSubtitle)).setText("Indeks: " + userProfile.userData.get(0).value);
+                    ((TextView) findViewById(R.id.nameSubtitle)).setText("Indeks: " + userProfile.userData.get(0).value);
+                }
+                catch (NullPointerException e)
+                {
+                    Log.w("GetUserProfileTask", "GetUserProfileTask encountered a NullPointerException when trying to set the text.");
+                }
             }
         }
     }
