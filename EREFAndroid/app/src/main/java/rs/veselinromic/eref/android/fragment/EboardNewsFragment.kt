@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.widget.SwipeRefreshLayout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -31,7 +32,7 @@ class EboardNewsFragment : Fragment(), RefreshableFragment
         var eboardNewsItems: List<EboardNewsItem>? = null
         var loadingAnimation = AnimatorSet()
 
-        override fun doInBackground(vararg params: Void): Void?
+        override fun doInBackground(vararg params: Void?): Void?
         {
             isRefreshing = true
 
@@ -54,7 +55,7 @@ class EboardNewsFragment : Fragment(), RefreshableFragment
             return null
         }
 
-        override fun onPostExecute(aVoid: Void)
+        override fun onPostExecute(aVoid: Void?)
         {
             isRefreshing = false
 
@@ -92,6 +93,7 @@ class EboardNewsFragment : Fragment(), RefreshableFragment
     {
         val rootView = inflater!!.inflate(R.layout.fragment_eboard_news, container, false)
 
+        val swipeRefreshLayout = rootView?.findViewById(R.id.swipeRefreshLayout) as SwipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener { GetEboardNewsTask().execute() }
 
         GetEboardNewsTask().execute()

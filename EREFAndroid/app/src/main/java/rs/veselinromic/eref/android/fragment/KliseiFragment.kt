@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.widget.SwipeRefreshLayout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -37,7 +38,7 @@ class KliseiFragment : Fragment(), RefreshableFragment
         var exampleItemList: List<EboardExampleItem>? = null
         var loadingAnimation = AnimatorSet()
 
-        override fun doInBackground(vararg params: Void): Void?
+        override fun doInBackground(vararg params: Void?): Void?
         {
             isRefreshing = true
 
@@ -60,7 +61,7 @@ class KliseiFragment : Fragment(), RefreshableFragment
             return null
         }
 
-        override fun onPostExecute(aVoid: Void)
+        override fun onPostExecute(aVoid: Void?)
         {
             isRefreshing = false
 
@@ -94,6 +95,7 @@ class KliseiFragment : Fragment(), RefreshableFragment
     {
         val rootView = inflater!!.inflate(R.layout.fragment_klisei, container, false)
 
+        val swipeRefreshLayout = rootView?.findViewById(R.id.swipeRefreshLayout) as SwipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener { GetExamplesTask().execute() }
 
         if (ContextCompat.checkSelfPermission(activity,

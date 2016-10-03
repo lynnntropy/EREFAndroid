@@ -55,7 +55,7 @@ class UserProfileFragment : Fragment(), RefreshableFragment
             return null
         }
 
-        override fun onPostExecute(aVoid: Void)
+        override fun onPostExecute(aVoid: Void?)
         {
             isRefreshing = false
 

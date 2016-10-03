@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.widget.SwipeRefreshLayout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -53,7 +54,7 @@ class SubjectsFragment : Fragment(), RefreshableFragment
             return null
         }
 
-        override fun onPostExecute(aVoid: Void)
+        override fun onPostExecute(aVoid: Void?)
         {
             isRefreshing = false
 
@@ -97,6 +98,7 @@ class SubjectsFragment : Fragment(), RefreshableFragment
     {
         val rootView = inflater!!.inflate(R.layout.fragment_subjects, container, false)
 
+        val swipeRefreshLayout = rootView?.findViewById(R.id.swipeRefreshLayout) as SwipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener { GetSubjectsTask().execute() }
 
         GetSubjectsTask().execute()

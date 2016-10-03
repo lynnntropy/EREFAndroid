@@ -84,7 +84,7 @@ class EboardResultsAdapter(internal var context: Context, internal var objects: 
             return null
         }
 
-        override fun onPostExecute(aVoid: Void)
+        override fun onPostExecute(aVoid: Void?)
         {
             val uri = Uri.fromFile(file)
             val mime = getMimeType(uri)
