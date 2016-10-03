@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,26 +35,42 @@ class ScheduleFragment : Fragment(), RefreshableFragment
             var loadingAnimation = AnimatorSet()
 
             onUiThread {
-                val listFade = ObjectAnimator.ofFloat(list, "alpha", 1f, 0f).setDuration(resources.getInteger(R.integer.loading_fade_duration).toLong())
-                val progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 0f, 1f).setDuration(resources.getInteger(R.integer.loading_fade_duration).toLong())
-                loadingAnimation.play(listFade).before(progressIndicatorFade)
-                loadingAnimation.start()
+
+                try
+                {
+                    val listFade = ObjectAnimator.ofFloat(list, "alpha", 1f, 0f).setDuration(resources.getInteger(R.integer.loading_fade_duration).toLong())
+                    val progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 0f, 1f).setDuration(resources.getInteger(R.integer.loading_fade_duration).toLong())
+                    loadingAnimation.play(listFade).before(progressIndicatorFade)
+                    loadingAnimation.start()
+                }
+                catch (e: IllegalStateException)
+                {
+                    Log.w("ScheduleFragment", "ScheduleFragment encountered an IllegalStateException while fetching the schedule.")
+                }
             }
 
             val schedule = ScheduleManager.getSchedule()
 
             onUiThread {
 
-                swipeRefreshLayout.isRefreshing = false
+                try
+                {
 
-                if (loadingAnimation.isRunning) loadingAnimation.cancel()
-                loadingAnimation = AnimatorSet()
-                val listFade = ObjectAnimator.ofFloat(list, "alpha", 0f, 1f).setDuration(resources.getInteger(R.integer.loading_fade_duration).toLong())
-                val progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 1f, 0f).setDuration(resources.getInteger(R.integer.loading_fade_duration).toLong())
-                loadingAnimation.play(progressIndicatorFade).before(listFade)
-                loadingAnimation.start()
+                    swipeRefreshLayout.isRefreshing = false
 
-                list.adapter = ScheduleAdapter(activity, schedule)
+                    if (loadingAnimation.isRunning) loadingAnimation.cancel()
+                    loadingAnimation = AnimatorSet()
+                    val listFade = ObjectAnimator.ofFloat(list, "alpha", 0f, 1f).setDuration(resources.getInteger(R.integer.loading_fade_duration).toLong())
+                    val progressIndicatorFade = ObjectAnimator.ofFloat(progressIndicator, "alpha", 1f, 0f).setDuration(resources.getInteger(R.integer.loading_fade_duration).toLong())
+                    loadingAnimation.play(progressIndicatorFade).before(listFade)
+                    loadingAnimation.start()
+
+                    list.adapter = ScheduleAdapter(activity, schedule)
+                }
+                catch (e: IllegalStateException)
+                {
+                    Log.w("ScheduleFragment", "ScheduleFragment encountered an IllegalStateException while fetching the schedule.")
+                }
             }
 
             isRefreshing = false
