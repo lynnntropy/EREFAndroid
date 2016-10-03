@@ -6,15 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import org.jetbrains.anko.find
 
 import rs.veselinromic.eref.android.R
 import rs.veselinromic.eref.android.Util
 import rs.veselinromic.eref.wrapper.model.ScheduleItem
-import rs.veselinromic.eref.wrapper.model.Subject
 
 
-class ScheduleAdapter(context: Context, objects: List<ScheduleItem>) : ArrayAdapter<ScheduleItem>(context, -1, objects)
+class ScheduleAdapter(context: Context, objects: List<ScheduleItem>) :
+        ArrayAdapter<ScheduleItem>(context, -1, objects)
 {
     init
     {
