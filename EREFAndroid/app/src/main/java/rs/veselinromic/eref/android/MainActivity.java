@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity
     public final static int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 100;
     Fragment currentFragment;
 
+    int selectedFragmentNavigationId = R.id.nav_vtsvesti;
+
     @Override
     public void onFragmentInteraction(Uri uri)
     {
@@ -79,10 +81,17 @@ public class MainActivity extends AppCompatActivity
         {
             if (userProfile != null)
             {
-                ((TextView) findViewById(R.id.name)).setText(
-                        String.format("%s %s", userProfile.userData.get(1).value, userProfile.userData.get(3).value));
+                try
+                {
+                    ((TextView) findViewById(R.id.name)).setText(
+                            String.format("%s %s", userProfile.userData.get(1).value, userProfile.userData.get(3).value));
 
-                ((TextView) findViewById(R.id.nameSubtitle)).setText("Indeks: " + userProfile.userData.get(0).value);
+                    ((TextView) findViewById(R.id.nameSubtitle)).setText("Indeks: " + userProfile.userData.get(0).value);
+                }
+                catch (NullPointerException e)
+                {
+                    Log.w("GetUserProfileTask", "GetUserProfileTask encountered a NullPointerException when trying to set the text.");
+                }
             }
         }
     }
@@ -139,14 +148,21 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         new GetUserProfileTask().execute();
-
-        currentFragment = new NewsFragment();
         this.fragmentContainerLayout = (RelativeLayout) findViewById(R.id.fragmentContainer);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainer, currentFragment);
-        transaction.commit();
 
-        setTitle("VTŠ Vesti");
+
+        if (savedInstanceState != null)
+        {
+            selectFragmentFromItemId(savedInstanceState.getInt("selectedFragmentId"));
+        }
+        else
+        {
+            currentFragment = new NewsFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragmentContainer, currentFragment);
+            transaction.commit();
+            setTitle("VTŠ Vesti");
+        }
 
         // if (!BackgroundService.isRunning) startService(new Intent(this, BackgroundService.class));
     }
@@ -186,7 +202,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item)
     {
-        int id = item.getItemId();
+        selectFragmentFromItemId(item.getItemId());
+        return true;
+    }
+
+    void selectFragmentFromItemId(int id)
+    {
+        selectedFragmentNavigationId = id;
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         switch(id)
@@ -245,7 +268,6 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     @Override
@@ -290,5 +312,13 @@ public class MainActivity extends AppCompatActivity
         }
 
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        outState.putInt("selectedFragmentId", selectedFragmentNavigationId);
+
+        super.onSaveInstanceState(outState);
     }
 }
